@@ -47,3 +47,13 @@ class laison:
 
         self.index = index
         self.labals = labals
+
+
+class Pile:
+
+    def __init__(self):
+        """
+
+        """
+
+        self.pile = []
