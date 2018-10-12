@@ -45,7 +45,5 @@ class laison:
 
         """
 
-        self.word = word
         self.index = index
-        self.parent = parent
-        self.nodes = []
+        self.labals = labals
