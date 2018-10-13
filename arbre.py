@@ -9,20 +9,20 @@ class tree:
 
     def push(vertex):
         """
-        push vertex
+        push vertex to the end of the tree
         """
-        self.vertices.append(vertex)
+        return self.vertices.append(vertex)
 
-    def pop(i):
+    def pop():
         """
-        show and delete the i vertex in vertices
+        return the first vertex in the tree
         """
-        self.vertices.pop(i)
+        return self.vertices.pop(0)
 
 
 class Vertex:
 
-    def __init__(self, word, index, parent, nodes):
+    def __init__(self, word, index, parent, nodes=[]):
         """
         constructor: Vertex
         input:
@@ -40,7 +40,7 @@ class Vertex:
 
 class laison:
 
-    def __init__(self, index, labels):
+    def __init__(self, index, labels=[]):
         """
 
         """
@@ -53,7 +53,17 @@ class Pile:
 
     def __init__(self):
         """
+        """
+        self.pile = []
 
+    def push(word):
         """
 
-        self.pile = []
+        """
+        return self.pile.append(word)
+
+    def pop():
+        """
+
+        """
+        return self.pile.pop(len(self.pile) - 1)
