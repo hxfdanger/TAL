@@ -1,8 +1,8 @@
-class tree:
+class Tree:
 
     def __init__(self):
         """
-        constructor: tree
+        constructor: Tree
         input: sentence list[string]
         """
         self.vertices = []
@@ -18,8 +18,32 @@ class tree:
         return the first vertex in the tree
         """
         return self.vertices.pop(0)
+        
+    def search(word):
+        """
+		Retourne le vertex qui contient word si il existe
+		Sinon retourne None
+        """
+        for vertex in self.vertices:
+			if vertex.word == word:
+				return vertex
+		return None
 
-
+	def link(word_i,labels,word_j):
+        """
+		input:
+            wordi_i=string
+            labels=string[]
+            word_j=string
+        Crée une liaison de wi vers wj avec label 
+        """
+        vertex_i = self.tree.search(word_i)
+        vertex_j = self.tree.search(word_j)
+        if vertex_i is not None and vertex_j is not None:
+			liaison = Liaison(index=vertex_j, labels=labels)
+			vertex_i.nodes.append(liaison)
+			vertex_j.parent = vertex_i
+ 
 class Vertex:
 
     def __init__(self, word, index, parent, nodes=[]):
@@ -29,7 +53,7 @@ class Vertex:
             word=string
             index=int
             parent=Vertex
-            nodes= list[]
+            nodes= Liaisons list[]
         """
 
         self.word = word
@@ -38,7 +62,7 @@ class Vertex:
         self.nodes = nodes
 
 
-class laison:
+class Liaison:
 
     def __init__(self, index, labels=[]):
         """
@@ -46,7 +70,7 @@ class laison:
         """
 
         self.index = index
-        self.labals = labals
+        self.labels = labels
 
 
 class Pile:
