@@ -63,12 +63,12 @@ class Tree:
                 word_j=string
         Crée une liaison devertex.show_liaison() wi vers wj avec labels
         """
-        vertex_i = self.tree.search(word_i)
-        vertex_j = self.tree.search(word_j)
+        vertex_i = self.search(word_i)
+        vertex_j = self.search(word_j)
         if vertex_i is not None and vertex_j is not None:
             liaison = Liaison(index=vertex_j, labels=labels)
-            vertex_i.nodes.append(liaison)
-            vertex_j.parent = vertex_i
+            vertex_i.add_link(liaison)
+            vertex_j.set_parent(vertex_i)
 
 
 class Vertex:
@@ -87,26 +87,36 @@ class Vertex:
         self.index = index
         self.parent = parent
         self.nodes = nodes
-		def get_word():
-			return self.word
 
-		def get_index():
-			return self.index
+    def get_word(self):
+        return self.word
 
-        def show_liaison():
-            for node in self.nodes:
-                print("\tTarget ", node.get_target())
-				print("\tType Laison : ", node.get_labels())
+    def get_index(self):
+        return self.index
 
-        def show_parent():
-			if self.parent is not None:
-                print("\tParent (", self.parent.get_index(), ") ", vertex.parent.get_word())
+    def show_liaison(self):
+        for node in self.nodes:
+            print("\tTarget ", node.get_target())
+            print("\tType Laison : ", node.get_labels())
 
-		def show_vertex():
-			print("Indice ", self.get_index(), " Word ", self.get_word())
-			self.show_parent()
-			self.show_liaison()
+    def show_parent(self):
+        if self.parent is not None:
+            print("\tParent (", self.parent.get_index(), ") ",
+                  vertex.parent.get_word())
 
+    def show_vertex(self):
+        print("Indice ", self.get_index(), " Word ", self.get_word())
+        self.show_parent()
+        self.show_liaison()
+
+    def set_parent(self, parent):
+        self.parent = parent
+
+    def add_link(self, liaison):
+        """
+        il manque le label à ajouter
+        """
+        self.nodes.append(liaison)
 
 
 class Liaison:
@@ -121,17 +131,14 @@ class Liaison:
         self.target = target
         self.labels = labels
 
-        def get_target():
+        def get_target(self):
             return self.target
 
-        def get_labels():
+        def get_labels(self):
             return self.labels
 
 
-
-
 class Pile:
-
     def __init__(self):
         """
         """
