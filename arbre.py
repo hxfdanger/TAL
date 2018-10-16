@@ -49,7 +49,7 @@ class Tree:
 			for liaison in vertex.nodes:
 				print("\tTarget ",liaison.target)
 		
-	def search(word):
+	def search(self,word):
 		"""
 		Retourne le vertex qui contient word si il existe
 		Sinon retourne None
@@ -59,7 +59,7 @@ class Tree:
 				return vertex
 		return None
 
-	def link(word_i,labels,word_j):
+	def link(self,word_i,labels,word_j):
 		"""
 		input:
 			wordi_i=string

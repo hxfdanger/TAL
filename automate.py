@@ -25,8 +25,7 @@ class Automate:
 		self.pile = Pile()
 		self.pile.push("Root")
 		self.buff = Pile()
-		sentence = sentence.reverse()
-		for word in sentence:
+		for word in reversed(sentence):
 			self.buff.push(word)
 		self.tree = Tree(sentence=sentence)
 	
