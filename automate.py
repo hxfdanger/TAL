@@ -119,11 +119,11 @@ class Automate:
         return self.tree
 
 
-sentence = ["Bonjour", "comment", "allez", "vous", "?"]
+sentence = ["sami", "va", "à", "la", "école"]
 
 automate = Automate(sentence=sentence)
 
-automate.tree.print_tree()
+# automate.tree.print_tree()
 
 tree = automate.run()
 

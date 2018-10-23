@@ -66,7 +66,7 @@ class Tree:
         vertex_i = self.search(word_i)
         vertex_j = self.search(word_j)
         if vertex_i is not None and vertex_j is not None:
-            liaison = Liaison(index=vertex_j, labels=labels)
+            liaison = Liaison(target=vertex_j, labels=labels)
             vertex_i.add_link(liaison)
             vertex_j.set_parent(vertex_i)
 
@@ -96,16 +96,18 @@ class Vertex:
 
     def show_liaison(self):
         for node in self.nodes:
-            print("\tTarget ", node.get_target())
+            print("\tTarget ", node.get_target().show_vertex())
             print("\tType Laison : ", node.get_labels())
 
     def show_parent(self):
         if self.parent is not None:
             print("\tParent (", self.parent.get_index(), ") ",
-                  vertex.parent.get_word())
+                  self.parent.get_word())
+        else:
+            print("\tParent : NO PARENT  ")
 
     def show_vertex(self):
-        print("Indice ", self.get_index(), " Word ", self.get_word())
+        print("Indice ", self.get_index(), " Word \"%s\" " % self.get_word())
         self.show_parent()
         self.show_liaison()
 
@@ -121,7 +123,7 @@ class Vertex:
 
 class Liaison:
 
-    def __init__(self, target, labels=[]):
+    def __init__(self, target=None, labels=[]):
         """
         input :
                 target= Vertex
@@ -131,11 +133,11 @@ class Liaison:
         self.target = target
         self.labels = labels
 
-        def get_target(self):
-            return self.target
+    def get_target(self):
+        return self.target
 
-        def get_labels(self):
-            return self.labels
+    def get_labels(self):
+        return self.labels
 
 
 class Pile:
