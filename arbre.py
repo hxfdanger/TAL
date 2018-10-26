@@ -65,8 +65,13 @@ class Tree:
         """
         vertex_i = self.search(word_i)
         vertex_j = self.search(word_j)
+
         if vertex_i is not None and vertex_j is not None:
             liaison = Liaison(target=vertex_j, labels=labels)
+            print("add link here : vertex_i : ")
+            vertex_i.show_vertex()
+            print(" vertex_j : ")
+            vertex_j.show_vertex()
             vertex_i.add_link(liaison)
             vertex_j.set_parent(vertex_i)
 
@@ -96,7 +101,7 @@ class Vertex:
 
     def show_liaison(self):
         for node in self.nodes:
-            print("\tTarget ", node.get_target().show_vertex())
+            print("\tTarget ", node.get_target().get_word())
             print("\tType Laison : ", node.get_labels())
 
     def show_parent(self):
