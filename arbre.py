@@ -131,7 +131,7 @@ class Vertex:
 
 class Liaison:
 
-	def __init__(self, target=None, label='None'):
+	def __init__(self, target=None, label=''):
 		"""
 		input :
 				target= Vertex
