@@ -24,7 +24,6 @@ class Automate:
         Initialise un automate avec les mots de la sentence
         """
         self.pile = Pile()
-        self.pile.push("Root")
         self.buff = Pile()
         for word in reversed(sentence):
             self.buff.push(word)
@@ -48,14 +47,16 @@ class Automate:
 
     def reduce(self):
         """
-        Supprime le sommet de la pile si il a un père
+        Supprime le sommet de la pile si il a un père, sauf si c'est le 
+        ROOT(Car il n'as jamais de père)
         """
         wi = self.pile.pop()
-        print(wi)
+        #print(wi)
         vertex = self.tree.search(wi)
         if vertex is not None:
             # Si il n'a pas de parent on annule l'action
-            if vertex.parent is None:
+            print("Parent ",vertex.parent)
+            if vertex.parent is None and vertex.get_word() is not 'ROOT':
                 self.pile.push(wi)
 
     def right(self, label):
@@ -64,11 +65,9 @@ class Automate:
         """
         wi = self.pile.pop()
         wj = self.buff.pop()
-        print(wi)
+        #print(wi)
 
-        l = list()
-        l.append(label)
-        self.tree.link(wi, l, wj)
+        self.tree.link(wi, label, wj)
 
         self.pile.push(wi)
         self.pile.push(wj)
@@ -79,16 +78,14 @@ class Automate:
         Seulement si le sommet de la pile n'as pas de parent
         """
         wi = self.pile.pop()
-        print(wi)
+        #print(wi)
         vertex = self.tree.search(wi)
         if vertex is not None:
             # Si wi n'a pas de parent
             if vertex.parent is None:
                 wj = self.buff.pop()
 
-                l = list()
-                l.append(label)
-                self.tree.link(wi, l, wj)
+                self.tree.link(wj, label, wi)
 
                 self.buff.push(wj)
             else:  # Si wi a déjà un parent on annule
@@ -99,26 +96,26 @@ class Automate:
         Execute l'automate sur la sentence et renvoie l'arbre obtenue
         """
         while not self.fin():
-            self.tree.print_tree()
+            #self.tree.print_tree()
             t = random.choice(range(4))  # Oracle transition
             if t == 0:
-                print("shift")
+                #print("shift")
                 self.shift()
             elif t == 1:
-                print("reduce")
+                #print("reduce")
                 self.reduce()
             elif t == 2:
-                print("right")
+                #print("right")
                 l = random.choice(range(4))  # Oracle label
                 self.right(l)
             elif t == 3:
-                print("left")
+                #print("left")
                 l = random.choice(range(4))  # Oracle label
                 self.left(l)
 
         return self.tree
 
-
+"""
 sentence = ["sami", "va", "à", "la", "école"]
 
 automate = Automate(sentence=sentence)
@@ -128,3 +125,4 @@ automate = Automate(sentence=sentence)
 tree = automate.run()
 
 tree.print_tree()
+"""
