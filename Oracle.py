@@ -106,8 +106,8 @@ class Oracle(Automate):
 							if self.present_dans_tree(Spile,l,vertex_i.get_word()): # Si cette liaison a déjà était ajouter a l'arbre
 								nb_dependances+=1	
 				print(nb_dependances,nb_dependant)
-				if nb_dependances == nb_dependant and nb_dependant > 0 or self.buff.len() == 0: # Si on a crée toutes les dépendances du sommet de pile
-					if self.tree.search(Spile).parent is not None:
+				if nb_dependances == nb_dependant or self.buff.len() == 0: # Si on a crée toutes les dépendances du sommet de pile
+					if self.tree.search(Spile).parent is not None or Spile == "ROOT":
 						self.pile.push(Spile)
 						self.buff.push(Sbuff) 
 						self.reduce()
@@ -136,7 +136,7 @@ def printSentence(sentence, mcd):
 wb = WordBuffer(mcd);
 wb.readFromConlluFile("../UD_French-GSD/fr_gsd-ud-test.conllu");
 
-for i in range(17):
+for i in range(int(sys.argv[1])):
 	sentence = wb.nextSentence()
 	sentNb = 1
 #print(sentence[2].getFeat('FORM'))
