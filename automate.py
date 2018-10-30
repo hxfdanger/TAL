@@ -55,7 +55,6 @@ class Automate:
         vertex = self.tree.search(wi)
         if vertex is not None:
             # Si il n'a pas de parent on annule l'action
-            print("Parent ",vertex.parent)
             if vertex.parent is None and vertex.get_word() is not 'ROOT':
                 self.pile.push(wi)
 
