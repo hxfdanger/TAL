@@ -111,3 +111,4 @@ class WordBuffer:
                         return True
                 else:
                         return False
+

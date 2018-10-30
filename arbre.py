@@ -47,7 +47,7 @@ class Tree:
 		for vertex in self.vertices:
 			vertex.show_vertex()
 
-	def search(self, index):
+	def index_search(self, index):
 		"""
 		Retourne le iéme vertex de l'arbre
 		"""
@@ -56,9 +56,9 @@ class Tree:
 	def link(self, wi, label, wj):
 		"""
 		input:
-				wi_i=string
+				wi=Indice dans le tableau vertices
 				label=string
-				wj=string
+				wj=Indice dans le tableau vertices
 		Crée une liaison de wi vers wj avec label
 		"""
 		vertex_i = self.search(wi)
@@ -72,7 +72,23 @@ class Tree:
 			#vertex_j.show_vertex()
 			vertex_i.add_link(liaison)
 			vertex_j.set_parent(vertex_i)
-
+			
+	def create_link_vertex(self, vi, label, vj):
+		"""
+		input:
+				vi=Vertex
+				label=string
+				vj=Vertex
+		Crée une liaison de vi vers vj avec label
+		"""
+		if vi is not None and vj is not None:
+			liaison = Liaison(target=vj, label=label)
+			print(" vertex .. add link here : vertex_i : ")
+			vi.show_vertex()
+			print(" vertex_j : ")
+			vj.show_vertex()
+			vi.add_link(liaison)
+			vj.set_parent(vi)
 
 class Vertex:
 
@@ -96,7 +112,32 @@ class Vertex:
 
 	def get_index(self):
 		return self.index
+	
+	def get_nodes(self):
+	    return self.nodes
 
+	def get_link_dep_by_label(self, label):
+		for vt in self.nodes:
+			if (vt.label == label):
+				return vt
+
+	def get_link_dep(self,vertex):
+		for vt in self.nodes:
+			if (vt.target == vertex):
+				return vt
+
+	def delete_link_dep(self,vertex):
+		for idx,vt in enumerate(self.nodes):
+			if(vt.target == vertex):
+				  del self.nodes[idx]
+
+	def get_all_deproj_link(self):
+		listes_dep = list()
+		for idx, vt in enumerate(self.nodes):
+			if (vt.label.find("|") != -1):
+				listes_dep.append(vt)
+		return listes_dep
+	
 	def show_liaison(self):
 		for node in self.nodes:
 			print("\t\tTarget (",  node.get_target().get_index(),")",node.get_target().get_word())
