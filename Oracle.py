@@ -54,7 +54,7 @@ class Oracle(Automate):
 		if wi == None or wj == None:
 			return False
 		
-		vertex_i = self.tree.search(wi)
+		vertex_i = self.tree.index_search(wi)
 		#vertex_i.show_liaison()
 		for liaison in vertex_i.nodes:
 			if liaison.get_target().get_index() == wj:
@@ -117,7 +117,7 @@ class Oracle(Automate):
 								nb_dependances+=1	
 				#print(nb_dependances,nb_dependant)
 				if nb_dependances == nb_dependant or self.buff.len() == 0: # Si on a crée toutes les dépendances du sommet de pile
-					if self.tree.search(Spile).parent is not None or self.tree.vertices[Spile].get_word() == "ROOT":
+					if self.tree.index_search(Spile).parent is not None or self.tree.vertices[Spile].get_word() == "ROOT":
 						self.pile.push(Spile)
 						self.buff.push(Sbuff) 
 						self.reduce()
@@ -145,7 +145,7 @@ def printSentence(sentence, mcd):
 		sentence[i].affiche(mcd)
 
 wb = WordBuffer(mcd);
-wb.readFromConlluFile("../UD_Japanese-Modern/ja_modern-ud-test.conllu");
+wb.readFromConlluFile("../UD_French-GSD/fr_gsd-ud-test.conllu"); #../UD_Japanese-Modern/ja_modern-ud-test.conllu
 
 for i in range(0,int(sys.argv[1])):
 	sentence = wb.nextSentence()
@@ -153,7 +153,7 @@ for i in range(0,int(sys.argv[1])):
 mots = list()
 for j in range(0, len(sentence)):
 	mots.append(sentence[j].getFeat('FORM'))
-print("N° : ",i, mots)
+print("N° : ",i+1, mots)
 
 A = Oracle(sentence,mots)
 tree, transitions = A.run()
