@@ -47,33 +47,29 @@ class Tree:
 		for vertex in self.vertices:
 			vertex.show_vertex()
 
-	def search(self, word):
+	def search(self, index):
 		"""
-		Retourne le vertex qui contient word si il existe
-		Sinon retourne None
+		Retourne le iéme vertex de l'arbre
 		"""
-		for vertex in self.vertices:
-			if vertex.get_word() == word:
-				return vertex
-		return None
+		return self.vertices[index]
 
-	def link(self, word_i, label, word_j):
+	def link(self, wi, label, wj):
 		"""
 		input:
-				wordi_i=string
+				wi_i=string
 				label=string
-				word_j=string
+				wj=string
 		Crée une liaison de wi vers wj avec label
 		"""
-		vertex_i = self.search(word_i)
-		vertex_j = self.search(word_j)
+		vertex_i = self.search(wi)
+		vertex_j = self.search(wj)
 
 		if vertex_i is not None and vertex_j is not None:
 			liaison = Liaison(target=vertex_j, label=label)
-			print("add link here : vertex_i : ")
-			vertex_i.show_vertex()
-			print(" vertex_j : ")
-			vertex_j.show_vertex()
+			#print("add link here : vertex_i : ")
+			#vertex_i.show_vertex()
+			#print(" vertex_j : ")
+			#vertex_j.show_vertex()
 			vertex_i.add_link(liaison)
 			vertex_j.set_parent(vertex_i)
 
@@ -103,8 +99,8 @@ class Vertex:
 
 	def show_liaison(self):
 		for node in self.nodes:
-			print("\tTarget ", node.get_target().get_word())
-			print("\tType Laison : ", node.get_label())
+			print("\t\tTarget (",  node.get_target().get_index(),")",node.get_target().get_word())
+			print("\t\tLabel :", node.get_label())
 
 	def show_parent(self):
 		if self.parent is not None:
@@ -114,8 +110,10 @@ class Vertex:
 			print("\tParent : NO PARENT  ")
 
 	def show_vertex(self):
-		print("Indice ", self.get_index(), " Word \"%s\" " % self.get_word())
+		print(self.get_index(), "-Word \"%s\" " % self.get_word())
 		self.show_parent()
+		if(len(self.nodes) > 0):
+			print("\tLiaisons")
 		self.show_liaison()
 
 	def set_parent(self, parent):
@@ -154,12 +152,12 @@ class Pile:
 		"""
 		self.pile = []
 
-	def push(self, word):
+	def push(self, index):
 		"""
 
 		"""
-		if word is not None:
-			return self.pile.append(word)
+		if index is not None:
+			return self.pile.append(index)
 
 	def pop(self):
 		"""

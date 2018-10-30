@@ -25,8 +25,8 @@ class Automate:
         """
         self.pile = Pile()
         self.buff = Pile()
-        for word in reversed(sentence):
-            self.buff.push(word)
+        for i in range(len(sentence)-1, -1, -1):
+            self.buff.push(i)
         self.tree = Tree()
         self.tree.fill(sentence)
 
