@@ -1,72 +1,60 @@
 import sys
 from WordBuffer import WordBuffer
 from automate import Automate
+from ConstructAllTree import ConstructAllTree
+from Projectivite import Projectivite
 
 class Oracle(Automate):
-	def __init__(self, datas, sentence=[]):
+	def __init__(self, target_tree):
 		"""
 		constructor: Automate
 		input:
-				sentence = String[]
-				datas = Informations des mots de la phrase dans un WordBuffer
-		Initialise un automate avec les mots de la sentence et les datas
-		Labels est la liste des different labels de la phrase
+				target_tree = Arbre objectif contenue dans un Tree
+		Initialise un automate avec les mots de la phrase
+		labels est la liste des different labels de la phrase
 		"""
+		sentence = list()
+		for vt in target_tree.vertices:
+			sentence.append(vt.get_word())
+		
 		Automate.__init__(self,sentence)
-		self.datas = datas
+		self.target_tree = target_tree
 		
 		self.labels = list()
-		for word in datas:
+		for word in sentence:
+			#print(word.getFeat('FORM'))
 			l = word.getFeat('LABEL')
-			if l not in self.labels:
-				self.labels.append(l)
+			if l is not None: # Si l n'est pas liée au root
+				if l not in self.labels: # Si l n'est pas déjà dans la liste
+					self.labels.append(l)
+		#print(self.labels)
 	
-	def present_dans_datas(self, wi, l, wj):
+	def present_in_tree(self, tree, wi, l, wj):
 		"""
 		Input :
+			tree : l'arbre dans lequel la recherche sera effectué
 			wi : l'indice du mot i
 			wj : l'indice du mot j
 			l : le label de la liaison (wi -> wj) 
-		Renvoie true si la liaison (wi, l, wj) est présente dans
-		self.datas
+		Renvoie true si la liaison (wi, l, wj) est présente dans tree
 		Sinon renvoie False
 		"""
 		if wi == None or wj == None:
 			return False
 		
-		for j in range(1, len(self.datas)): # Pour chaques mots de la phrase
-			if(int(self.datas[j].getFeat('INDEX')) == wj): # Si le mots est wj
-				if(int(self.datas[j].getFeat('GOV')) == wi): # Si le gouvernant de wj est wi
-					if(self.datas[j].getFeat('LABEL') == l): # Si leurs label est l
-						return True
-		return False
-		
-	def present_dans_tree(self, wi, l, wj):
-		"""
-		Input :
-			wi : l'indice du mot i
-			wj : l'indice du mot j
-			l : le label de la liaison (wi -> wj) 
-		Renvoie true si la liaison (wi, l, wj) est présente dans
-		self.tree
-		Sinon renvoie False
-		"""
-		if wi == None or wj == None:
-			return False
-		
-		vertex_i = self.tree.index_search(wi)
+		vertex_i = tree.index_search(wi)
 		#vertex_i.show_liaison()
 		for liaison in vertex_i.nodes:
 			if liaison.get_target().get_index() == wj:
-				#print("aff",liaison.get_target().get_word())
+				#print("aff",liaison.get_target().get_word().getFeat('FORM'))
 				if liaison.get_label() == l:
 					return True
 		return False
 	
 	def run(self):
 		"""
-		Execute l'oracle sur la sentence et renvoie la suite de 
-		transitions qui génére l'arbre contenue dans datas
+		Execute l'oracle sur phrase et renvoie la suite de 
+		transitions qui génére self.target_tree
 		"""
 		transitions = list()
 		
@@ -81,22 +69,24 @@ class Oracle(Automate):
 			# LEFT_l
 			if Spile is not None:
 				for l in self.labels:
-					if self.present_dans_datas(Sbuff,l,Spile):
+					if self.present_in_tree(self.target_tree,Sbuff,l,Spile):
 						self.pile.push(Spile)
 						self.buff.push(Sbuff)
 						self.left(l)
 						transitions.append("LEFT_"+l)
+						#print("LEFT_" + l)
 						flag = False
 						break
 			
 			# RIGHT_l			
 			if flag and Spile is not None:
 				for l in self.labels:
-					if self.present_dans_datas(Spile,l,Sbuff):
+					if self.present_in_tree(self.target_tree,Spile,l,Sbuff):
 						self.pile.push(Spile)
 						self.buff.push(Sbuff)
 						self.right(l)
 						transitions.append("RIGHT_" + l)
+						#print("RIGHT_" + l)
 						flag = False
 						break
 			
@@ -108,44 +98,75 @@ class Oracle(Automate):
 					#if vertex_i.parent == None:
 					#	continue
 					for l in self.labels: # Pour tous les labels possible
-						if self.present_dans_datas(Spile,l,vertex_i.get_index()): # Si le Spile gouverne vertex
+						if self.present_in_tree(self.target_tree,Spile,l,vertex_i.get_index()): # Si le Spile gouverne vertex
 							nb_dependant+=1
 							#print(vertex_i.get_word()," Label ", l)
 							#if vertex_i.get_word() == 'Trois' and l == 'nummod':
 							#	sys.exit(0)
-							if self.present_dans_tree(Spile,l,vertex_i.get_index()): # Si cette liaison a déjà était ajouter a l'arbre
+							if self.present_in_tree(self.tree,Spile,l,vertex_i.get_index()): # Si cette liaison a déjà était ajouter a l'arbre
 								nb_dependances+=1	
 				#print(nb_dependances,nb_dependant)
+				#print(self.tree.vertices[Spile].get_word().getFeat('FORM'))
 				if nb_dependances == nb_dependant or self.buff.len() == 0: # Si on a crée toutes les dépendances du sommet de pile
-					if self.tree.index_search(Spile).parent is not None or self.tree.vertices[Spile].get_word() == "ROOT":
+					if self.tree.index_search(Spile).parent is not None or self.tree.vertices[Spile].get_word().getFeat('FORM') == "root":
 						self.pile.push(Spile)
 						self.buff.push(Sbuff) 
 						self.reduce()
 						transitions.append("REDUCE")
+						#print("REDUCE")
 						flag = False	
 			
 			# SHIFT			
 			if flag:
 				transitions.append("SHIFT")
+				#print("SHIFT")
 				self.pile.push(Spile)
 				self.buff.push(Sbuff)
 				self.shift()
 		
-		print("")
 		return self.tree, transitions
 
+"""
+# Teste de la classe Automate
+# Appelle la méthodes run sur les phrases du fichier test.txt
 
+# Lecture du fichier conllu
+mcd =(('INDEX', 'INT'), ('FORM', 'INT'), ('LEMMA', 'INT'), ('POS', 'SYM'), ('X1', 'INT'), ('MORPHO', 'INT'), ('GOV', 'SYM'), ('LABEL', 'SYM'), ('X2', 'SYM'), ('X3', 'SYM'))
+obj_generateAlltree = ConstructAllTree("test.txt",mcd,True)
+all_tree = obj_generateAlltree.get_allTree()
 
+for tree in all_tree:
+	sentence = list()
+	for vt in tree.vertices:
+		sentence.append(vt.get_word())
+		
+	automate = Automate(sentence=sentence)
+	tree = automate.run()
+	tree.print_tree()
+"""
+
+# Teste de la classe Oracle
 mcd =(('INDEX', 'INT'), ('FORM', 'INT'), ('LEMMA', 'INT'), ('POS', 'SYM'), ('X1', 'INT'), ('MORPHO', 'INT'), ('GOV', 'SYM'), ('LABEL', 'SYM'), ('X2', 'SYM'), ('X3', 'SYM'))
 
-#wb.affiche(mcd)
+# Lecture du fichier conllu
+obj_generateAlltree = ConstructAllTree("test.txt",mcd,False)
+all_tree = obj_generateAlltree.get_allTree()
 
+for tree in all_tree:
+	#tree.print_tree()
+			
+	A = Oracle(tree)
+	result_tree, transitions = A.run()
+	result_tree.print_tree()
+	print(transitions)
+		
+"""
 def printSentence(sentence, mcd):
 	for i in range(0, len(sentence)):
 		sentence[i].affiche(mcd)
 
 wb = WordBuffer(mcd);
-wb.readFromConlluFile("../UD_French-GSD/fr_gsd-ud-test.conllu"); #../UD_Japanese-Modern/ja_modern-ud-test.conllu
+wb.readFromConlluFile("test.txt"); #../UD_Japanese-Modern/ja_modern-ud-test.conllu  ../UD_French-GSD/fr_gsd-ud-test.conllu
 
 for i in range(0,int(sys.argv[1])):
 	sentence = wb.nextSentence()
@@ -154,11 +175,7 @@ mots = list()
 for j in range(0, len(sentence)):
 	mots.append(sentence[j].getFeat('FORM'))
 print("N° : ",i+1, mots)
-
-A = Oracle(sentence,mots)
-tree, transitions = A.run()
-tree.print_tree()
-print(transitions)
+"""
 
 """
 for i in range(0,104):
