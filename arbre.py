@@ -62,9 +62,9 @@ class Tree:
     def link(self, wi, label, wj):
         """
 		input:
-				wi=Indice dans le tableau vertices
+				wi=Indice dans le tableau vertices (gouverneur)
 				label=string
-				wj=Indice dans le tableau vertices
+				wj=Indice dans le tableau vertices (dependant)
 		Crée une liaison de wi vers wj avec label
 		"""
         vertex_i = self.index_search(wi)

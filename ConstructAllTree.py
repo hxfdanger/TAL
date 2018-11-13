@@ -38,6 +38,7 @@ class ConstructAllTree:
             for tree in self.alltree:
 
                 proj_tree, exist = obj_proj.projectiviser(tree)
+                tree.print_tree()
 
                 if (exist == True):
 
