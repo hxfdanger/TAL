@@ -3,13 +3,20 @@ from WordBuffer import WordBuffer
 from automate import Automate
 from ConstructAllTree import ConstructAllTree
 from Projectivite import Projectivite
+from Features import Features
 
 class Oracle(Automate):
-	def __init__(self, target_tree):
+	"""
+	Objectif : 
+		Construire les configurations et les transitions corespondantes d'un arbre
+	"""
+	
+	def __init__(self, target_tree,features):
 		"""
 		constructor: Automate
 		input:
 				target_tree = Arbre objectif contenue dans un Tree
+				features = liste des features à prendre en compte pour construire une configuration
 		Initialise un automate avec les mots de la phrase
 		labels est la liste des different labels de la phrase
 		"""
@@ -28,6 +35,12 @@ class Oracle(Automate):
 				if l not in self.labels: # Si l n'est pas déjà dans la liste
 					self.labels.append(l)
 		#print(self.labels)
+		
+		self.features = features
+		
+		# Dataset
+		self.X = []
+		self.Y = [] 
 	
 	def present_in_tree(self, tree, wi, l, wj):
 		"""
@@ -54,26 +67,28 @@ class Oracle(Automate):
 	def run(self):
 		"""
 		Execute l'oracle sur phrase et renvoie la suite de 
-		transitions qui génére self.target_tree
+		transitions qui génére self.target_tree ainsi que les 
+		configurations corespondantes
 		"""
-		transitions = list()
 		
 		while not self.fin():
 			#self.tree.print_tree()
 			flag = True
 			
-			Spile = self.pile.pop()
-			Sbuff = self.buff.pop()
-			#print("Spile : ",Spile," Sbuff : ",Sbuff)
+			self.X.append(features.extract_features(self.pile,self.buff,self.tree))
+			
+			Spile = self.pile.see(0)
+			Sbuff = self.buff.see(0)
+			print("Spile : ",Spile," Sbuff : ",Sbuff)
 			
 			# LEFT_l
 			if Spile is not None:
 				for l in self.labels:
 					if self.present_in_tree(self.target_tree,Sbuff,l,Spile):
-						self.pile.push(Spile)
-						self.buff.push(Sbuff)
+						#self.pile.push(Spile)
+						#self.buff.push(Sbuff)
 						self.left(l)
-						transitions.append("LEFT_"+l)
+						self.Y.append("LEFT_"+l)
 						#print("LEFT_" + l)
 						flag = False
 						break
@@ -82,10 +97,10 @@ class Oracle(Automate):
 			if flag and Spile is not None:
 				for l in self.labels:
 					if self.present_in_tree(self.target_tree,Spile,l,Sbuff):
-						self.pile.push(Spile)
-						self.buff.push(Sbuff)
+						#self.pile.push(Spile)
+						#self.buff.push(Sbuff)
 						self.right(l)
-						transitions.append("RIGHT_" + l)
+						self.Y.append("RIGHT_" + l)
 						#print("RIGHT_" + l)
 						flag = False
 						break
@@ -109,25 +124,25 @@ class Oracle(Automate):
 				#print(self.tree.vertices[Spile].get_word().getFeat('FORM'))
 				if nb_dependances == nb_dependant or self.buff.len() == 0: # Si on a crée toutes les dépendances du sommet de pile
 					if self.tree.index_search(Spile).parent is not None or self.tree.vertices[Spile].get_word().getFeat('FORM') == "root":
-						self.pile.push(Spile)
-						self.buff.push(Sbuff) 
+						#self.pile.push(Spile)
+						#self.buff.push(Sbuff) 
 						self.reduce()
-						transitions.append("REDUCE")
+						self.Y.append("REDUCE")
 						#print("REDUCE")
 						flag = False	
 			
 			# SHIFT			
 			if flag:
-				transitions.append("SHIFT")
+				self.Y.append("SHIFT")
 				#print("SHIFT")
-				self.pile.push(Spile)
-				self.buff.push(Sbuff)
+				#self.pile.push(Spile)
+				#self.buff.push(Sbuff)
 				self.shift()
 		
-		return self.tree, transitions
+		return self.tree, self.X, self.Y
 
 """
-# Teste de la classe Automate
+# Test de la classe Automate
 # Appelle la méthodes run sur les phrases du fichier test.txt
 
 # Lecture du fichier conllu
@@ -145,20 +160,23 @@ for tree in all_tree:
 	tree.print_tree()
 """
 
-# Teste de la classe Oracle
+# Test de la classe Oracle
 mcd =(('INDEX', 'INT'), ('FORM', 'INT'), ('LEMMA', 'INT'), ('POS', 'SYM'), ('X1', 'INT'), ('MORPHO', 'INT'), ('GOV', 'SYM'), ('LABEL', 'SYM'), ('X2', 'SYM'), ('X3', 'SYM'))
 
 # Lecture du fichier conllu
 obj_generateAlltree = ConstructAllTree("test.txt",mcd,False)
 all_tree = obj_generateAlltree.get_allTree()
 
+features = Features("f1_tbp.fm")
+
 for tree in all_tree:
 	#tree.print_tree()
 			
-	A = Oracle(tree)
-	result_tree, transitions = A.run()
-	result_tree.print_tree()
-	print(transitions)
+	A = Oracle(tree, features)
+	result_tree, X, Y = A.run()
+	#result_tree.print_tree()
+	print(X)
+	print(Y)
 		
 """
 def printSentence(sentence, mcd):
