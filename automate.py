@@ -20,8 +20,8 @@ class Automate:
         """
         constructor: Automate
         input:
-                sentence = String[]
-        Initialise un automate avec les mots de la sentence
+                sentence = Word[]
+        Initialise un automate avec les mots de la sentence (Constitué de Word)
         """
         self.pile = Pile()
         self.buff = Pile()
@@ -48,14 +48,14 @@ class Automate:
     def reduce(self):
         """
         Supprime le sommet de la pile si il a un père, sauf si c'est le 
-        ROOT(Car il n'as jamais de père)
+        root (Car il n'as jamais de père)
         """
         wi = self.pile.pop()
         #print(wi)
         vertex = self.tree.index_search(wi)
         if vertex is not None:
             # Si il n'a pas de parent on annule l'action
-            if vertex.parent is None and vertex.get_word() is not 'ROOT':
+            if vertex.parent is None and vertex.get_word().getFeat('FORM') is not "root":
                 self.pile.push(wi)
 
     def right(self, label):
