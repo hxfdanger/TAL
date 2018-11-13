@@ -61,8 +61,8 @@ class Tree:
 				wj=Indice dans le tableau vertices
 		Crée une liaison de wi vers wj avec label
 		"""
-		vertex_i = self.search(wi)
-		vertex_j = self.search(wj)
+		vertex_i = self.index_search(wi)
+		vertex_j = self.index_search(wj)
 
 		if vertex_i is not None and vertex_j is not None:
 			liaison = Liaison(target=vertex_j, label=label)

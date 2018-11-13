@@ -52,7 +52,7 @@ class Automate:
         """
         wi = self.pile.pop()
         #print(wi)
-        vertex = self.tree.search(wi)
+        vertex = self.tree.index_search(wi)
         if vertex is not None:
             # Si il n'a pas de parent on annule l'action
             if vertex.parent is None and vertex.get_word() is not 'ROOT':
@@ -78,7 +78,7 @@ class Automate:
         """
         wi = self.pile.pop()
         #print(wi)
-        vertex = self.tree.search(wi)
+        vertex = self.tree.index_search(wi)
         if vertex is not None:
             # Si wi n'a pas de parent
             if vertex.parent is None:
