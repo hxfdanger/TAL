@@ -39,16 +39,10 @@ class ConstructAllTree:
 
                 proj_tree, exist = obj_proj.projectiviser(tree)
 
-                print(exist)
-
                 if (exist == True):
-                    print("True")
-                    print("####################")
-                    print(proj_tree.print_tree())
+
                     self.alltreeProjectivise.append(proj_tree)
                 else:
-                    print("EXIST False")
-                    print(tree.print_tree())
 
                     self.alltreeProjectivise.append(tree)
 
