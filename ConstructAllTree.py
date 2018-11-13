@@ -39,10 +39,17 @@ class ConstructAllTree:
 
                 proj_tree, exist = obj_proj.projectiviser(tree)
 
-                if (exist == True):
+                print(exist)
 
+                if (exist == True):
+                    print("True")
+                    print("####################")
+                    print(proj_tree.print_tree())
                     self.alltreeProjectivise.append(proj_tree)
                 else:
+                    print("EXIST False")
+                    print(tree.print_tree())
+
                     self.alltreeProjectivise.append(tree)
 
 
@@ -198,6 +205,9 @@ class ConstructAllTree:
 
                         if(bool_root):
                             tree.push(Vertex(w, root, list()))
+                            wactual_index = int(w.getFeat("INDEX"))
+                            root_index = 0 # indice du root est à 0 pour eviter le confusio avec les mot de la phrase qui commence par 1
+                            tree.link(root_index, w.getFeat("LABEL"),  wactual_index)
 
 
                         else:
@@ -244,13 +254,13 @@ if(__name__ == "__main__"):
     obj_generateAlltree = ConstructAllTree("test.txt",mcd,True)
 
 
-    all_tree = obj_generateAlltree.get_allTreeProjectiviser()
-
-
-    pp =Projectivite()
-
-    for tree in all_tree:
-            tree.print_tree()
+    # all_tree = obj_generateAlltree.get_allTreeProjectiviser()
+    #
+    #
+    # pp =Projectivite()
+    #
+    # for tree in all_tree:
+    #         tree.print_tree()
 
 
          # for index, vertice in enumerate(tree.get_vertices()):
