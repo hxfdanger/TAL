@@ -38,6 +38,7 @@ class ConstructAllTree:
             for tree in self.alltree:
 
                 proj_tree, exist = obj_proj.projectiviser(tree)
+                tree.print_tree()
 
                 if (exist == True):
 
@@ -146,7 +147,14 @@ class ConstructAllTree:
                 next
 
             else:
-                tokens = ligne.split() # separation de la phrase en liste qui respecter normalement
+                if(ligne[0] == "#"):
+                    tokens = ligne.split() # separation de la phrase en liste qui respecter normalement
+                else:
+                    tokens = ligne.split("\t") # separation de la phrase en liste qui respecter normalement
+
+
+
+                print(tokens)
 
 
                 if len(tokens) != len(self.mcd) and tokens[0]!= "#":

@@ -52,9 +52,10 @@ class Projectivite:
                                                 tree.create_link_vertex(v_gouv_gouv, label, v)
                                                 v_gouv.delete_link_dep(v)
                                                 proj_bool = True
-                                                # print(proj_bool," Projectivation =", v_gouv.nodes)
+                                                # print("######## ",proj_bool," Projectivation =", link_gouv_gouv,"|",link_dep)
 
 
+        # print("########## =",proj_bool)
 
         return tree,proj_bool
 
