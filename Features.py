@@ -12,11 +12,12 @@ class Features:
 		input:
 				features_file = fichier contenant la liste des features
 		"""
-		self.features = list()
+		self.names = list()
 		
+		# Lecture du fichier
 		with open(features_file,'r') as f:
 			lines = f.readlines()
-				
+		# Remplissage des noms 
 		for line in lines:
 			#print(line)
 			line = line.split(".")
@@ -26,14 +27,17 @@ class Features:
 			if line[0] == 'S':
 				idx = int(line[1])
 				feat = line[2]
-				self.features.append(("Pile",idx,feat))
+				self.names.append(("Pile",idx,feat))
 			elif line[0] == 'B':
 				idx = int(line[1])
 				feat = line[2]
-				self.features.append(("Buffer",idx,feat))
+				self.names.append(("Buffer",idx,feat))
 			else:
-				self.features.append(line[0])
-		print(self.features)
+				self.names.append(line[0])
+		print(self.names)
+		
+		self.datas = list()
+		self.labels = list()
 		
 	def extract_features(self, pile, buff, tree):
 		"""
@@ -44,7 +48,7 @@ class Features:
 		"""
 		features = list()
 		
-		for feature in self.features:
+		for feature in self.names:
 			print(feature)
 			if feature[0] == 'Pile':
 				idx = feature[1]
@@ -54,18 +58,19 @@ class Features:
 					data = tree.vertices[idx_pile].get_elementWord(element=feat)
 					#print(data)
 				else:
-					data = None
+					data = 'NA' # Donnée non aquise
 										
 			elif feature[0] == 'Buffer':
 				idx_buff = feature[1]
 				feat = feature[2]
 				
+				# Le buffer est vide toutes les datas sont dans un buffer fantomes 
 				idx = buff.see(0)
 				if idx == None: # Si le buffer est vide
-					idx = len(tree.vertices)-1
+					idx = len(tree.vertices)
 					
 				if idx+idx_buff < 0 or idx+idx_buff >= len(tree.vertices): # Si la features concerne un élément hors de la phrase
-					data = None
+					data = 'NA' # Donnée non aquise
 				else:
 					data = tree.vertices[idx+idx_buff].get_elementWord(element=feat)
 					
@@ -75,11 +80,11 @@ class Features:
 				if Spile != None and Sbuff != None:
 					data = abs(tree.vertices[Spile].get_index() - tree.vertices[Sbuff].get_index())
 				else:
-					data = None
+					data = 'NA' # Donnée non aquise
 			
-			features.append(data)
-		print(features)
-		return features
+			self.datas.append(data)
+		print(data)
+		return data
 
 # Pour faire des One-hot
 # https://machinelearningmastery.com/how-to-one-hot-encode-sequence-data-in-python/
