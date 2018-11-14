@@ -37,10 +37,6 @@ class Oracle(Automate):
 		#print(self.labels)
 		
 		self.features = features
-		
-		# Dataset
-		self.X = []
-		self.Y = [] 
 	
 	def present_in_tree(self, tree, wi, l, wj):
 		"""
@@ -66,20 +62,20 @@ class Oracle(Automate):
 	
 	def run(self):
 		"""
-		Execute l'oracle sur phrase et renvoie la suite de 
-		transitions qui génére self.target_tree ainsi que les 
-		configurations corespondantes
+		Execute l'oracle sur phrase et ajoute à self.features.labels 
+		la suite de transitions qui génére self.target_tree ainsi que 
+		les configurations corespondantes à self.features.datas
 		"""
 		
 		while not self.fin():
 			#self.tree.print_tree()
 			flag = True
 			
-			self.X.append(features.extract_features(self.pile,self.buff,self.tree))
+			features.extract_features(self.pile,self.buff,self.tree)
 			
 			Spile = self.pile.see(0)
 			Sbuff = self.buff.see(0)
-			print("Spile : ",Spile," Sbuff : ",Sbuff)
+			#print("Spile : ",Spile," Sbuff : ",Sbuff)
 			
 			# LEFT_l
 			if Spile is not None:
@@ -88,7 +84,7 @@ class Oracle(Automate):
 						#self.pile.push(Spile)
 						#self.buff.push(Sbuff)
 						self.left(l)
-						self.Y.append("LEFT_"+l)
+						self.features.labels.append("LEFT_"+l)
 						#print("LEFT_" + l)
 						flag = False
 						break
@@ -100,7 +96,7 @@ class Oracle(Automate):
 						#self.pile.push(Spile)
 						#self.buff.push(Sbuff)
 						self.right(l)
-						self.Y.append("RIGHT_" + l)
+						self.features.labels.append("RIGHT_" + l)
 						#print("RIGHT_" + l)
 						flag = False
 						break
@@ -127,19 +123,19 @@ class Oracle(Automate):
 						#self.pile.push(Spile)
 						#self.buff.push(Sbuff) 
 						self.reduce()
-						self.Y.append("REDUCE")
+						self.features.labels.append("REDUCE")
 						#print("REDUCE")
 						flag = False	
 			
 			# SHIFT			
 			if flag:
-				self.Y.append("SHIFT")
+				self.features.labels.append("SHIFT")
 				#print("SHIFT")
 				#self.pile.push(Spile)
 				#self.buff.push(Sbuff)
 				self.shift()
-		
-		return self.tree, self.X, self.Y
+
+		return self.tree
 
 """
 # Test de la classe Automate
@@ -160,7 +156,7 @@ for tree in all_tree:
 	tree.print_tree()
 """
 
-# Test de la classe Oracle
+# Test de la classe Oracle et Features
 mcd =(('INDEX', 'INT'), ('FORM', 'INT'), ('LEMMA', 'INT'), ('POS', 'SYM'), ('X1', 'INT'), ('MORPHO', 'INT'), ('GOV', 'SYM'), ('LABEL', 'SYM'), ('X2', 'SYM'), ('X3', 'SYM'))
 
 # Lecture du fichier conllu
@@ -173,10 +169,14 @@ for tree in all_tree:
 	#tree.print_tree()
 			
 	A = Oracle(tree, features)
-	result_tree, X, Y = A.run()
+	result_tree = A.run()
 	#result_tree.print_tree()
-	print(X)
-	print(Y)
+print("Liste des données (X) :")
+print(features.datas)
+print("Liste des labels (Y) :")
+print(features.labels)
+print("Nb label : ",len(features.labels))
+print("Nb data : ",len(features.datas))
 		
 """
 def printSentence(sentence, mcd):
