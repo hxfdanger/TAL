@@ -4,6 +4,7 @@ class Features:
 	"""
 	Objectif : 
 		Construire la liste des features présent dans un fichiers fm
+		Et constitué le dataset corespndant au features
 	"""
 	
 	def __init__(self, features_file):
@@ -11,6 +12,7 @@ class Features:
 		constructor: Features
 		input:
 				features_file = fichier contenant la liste des features
+		Remplie la liste des features en lisant le fichier features_file
 		"""
 		self.names = list()
 		
@@ -46,11 +48,13 @@ class Features:
 				pile = La pile courante
 				buff = Le buffer courant
 				tree = L'arbre courant
+		Extrait les features de l'état courant (pile,buff,tree) et les 
+		ajoute à self.datas
 		"""
 		data = list()
 		
 		for feature in self.names:
-			#print(feature)
+			print(feature)
 			if feature[0] == 'Pile':
 				idx = feature[1]
 				feat = feature[2]

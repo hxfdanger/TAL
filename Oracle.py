@@ -71,11 +71,11 @@ class Oracle(Automate):
 			#self.tree.print_tree()
 			flag = True
 			
-			features.extract_features(self.pile,self.buff,self.tree)
-			
 			Spile = self.pile.see(0)
 			Sbuff = self.buff.see(0)
-			#print("Spile : ",Spile," Sbuff : ",Sbuff)
+			print("Spile : ",Spile," Sbuff : ",Sbuff)
+			
+			features.extract_features(self.pile,self.buff,self.tree)
 			
 			# LEFT_l
 			if Spile is not None:
@@ -163,7 +163,7 @@ mcd =(('INDEX', 'INT'), ('FORM', 'INT'), ('LEMMA', 'INT'), ('POS', 'SYM'), ('X1'
 obj_generateAlltree = ConstructAllTree("test.txt",mcd,False)
 all_tree = obj_generateAlltree.get_allTree()
 
-features = Features("f1_tbp.fm")
+features = Features("f2_tbp.fm")
 
 for tree in all_tree:
 	#tree.print_tree()
