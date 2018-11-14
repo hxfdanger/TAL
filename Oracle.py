@@ -163,7 +163,7 @@ mcd =(('INDEX', 'INT'), ('FORM', 'INT'), ('LEMMA', 'INT'), ('POS', 'SYM'), ('X1'
 obj_generateAlltree = ConstructAllTree("test.txt",mcd,False)
 all_tree = obj_generateAlltree.get_allTree()
 
-features = Features("f2_tbp.fm")
+features = Features("f3_tbp.fm")
 
 for tree in all_tree:
 	#tree.print_tree()
@@ -177,7 +177,11 @@ print("Liste des labels (Y) :")
 print(features.labels)
 print("Nb label : ",len(features.labels))
 print("Nb data : ",len(features.datas))
-		
+
+onehot = features.convert_datas_to_one_hot()
+print("Final ",onehot)
+
+
 """
 def printSentence(sentence, mcd):
 	for i in range(0, len(sentence)):

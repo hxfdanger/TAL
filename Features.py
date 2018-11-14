@@ -1,4 +1,7 @@
 import sys
+import numpy as np
+from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import OneHotEncoder
 
 class Features:
 	"""
@@ -21,10 +24,8 @@ class Features:
 			lines = f.readlines()
 		# Remplissage des noms 
 		for line in lines:
-			#print(line)
 			line = line.split(".")
 			line[-1] = line[-1].rstrip('\n')
-			#print(line)
 			
 			if line[0] == 'S':
 				idx = int(line[1])
@@ -42,6 +43,11 @@ class Features:
 		self.datas = list()
 		self.labels = list()
 		
+		# OneHot encoders pour crée les vecteurs one hot
+		self.oneHot_encoders = list()
+		for features in self.names:
+			self.oneHot_encoders.append(OneHotEncoder(sparse=False,handle_unknown='ignore'))
+		
 	def extract_features(self, pile, buff, tree):
 		"""
 		input:
@@ -51,11 +57,11 @@ class Features:
 		Extrait les features de l'état courant (pile,buff,tree) et les 
 		ajoute à self.datas
 		"""
-		data = list()
+		data = list() # Liste des features de l'états courant
 		
-		for feature in self.names:
+		for feature in self.names: # Pour toutes les features connues
 			print(feature)
-			if feature[0] == 'Pile':
+			if feature[0] == 'Pile': # Si la feature concerne la pile
 				idx = feature[1]
 				feat = feature[2]
 				idx_pile = pile.see(idx)
@@ -65,7 +71,7 @@ class Features:
 				else:
 					data.append('NA') # Donnée non aquise
 										
-			elif feature[0] == 'Buffer':
+			elif feature[0] == 'Buffer': # Si la feature concerne le buffer
 				idx_buff = feature[1]
 				feat = feature[2]
 				
@@ -78,7 +84,7 @@ class Features:
 				else:
 					data.append(tree.vertices[idx+idx_buff].get_elementWord(element=feat))
 					
-			elif feature == 'DIST':
+			elif feature == 'DIST': # Si la feature est une distance
 				Spile = pile.see(0)
 				Sbuff = buff.see(0)
 				if Spile != None and Sbuff != None:
@@ -90,7 +96,48 @@ class Features:
 		
 		#print(data)
 		return data
-
+		
+	def convert_data_to_one_hot(self,data):
+		"""
+		Converti la liste de features data en un tableau 1D de vecteur one hot 
+		"""
+		if len(data) != len(self.names):
+			print("La donnée ne posséde pas autant de features que demander !")
+			return None
+		
+		new_data = list()
+		for i,feature in enumerate(data):
+			tmp = np.array(feature).reshape(1, -1)
+			tmp = self.oneHot_encoders[i].transform(tmp)
+			new_data.append(tmp.reshape(-1))
+			
+		new_data = np.asarray(new_data)
+		new_data = new_data.flatten()
+		print(new_data)	
+		return new_data
+		
+	def convert_datas_to_one_hot(self):
+		"""
+		Entrainent les labels encoders sur le dataset
+		Converti les self.datas en une liste de liste de vecteur one hot
+		"""
+		if len(self.datas) <= 0:
+			print("Le dataset est vide, il est impossible d'entrainer les labels encoders!")
+			return None
+			
+		# Entrainment des oneHot_encoders
+		values = np.array(self.datas)
+		#values = values.reshape(np.shape(values)[0],np.shape(values)[1], 1)
+		for i,encoder in enumerate(self.oneHot_encoders):
+			#print(values[:,i])
+			encoder = encoder.fit(values[:,i].reshape(-1, 1))
+		
+		# Convertion du dataset
+		for data in self.datas:
+			data = self.convert_data_to_one_hot(data)
+		
+		return self.datas
+		
 # Pour faire des One-hot
 # https://machinelearningmastery.com/how-to-one-hot-encode-sequence-data-in-python/
 
