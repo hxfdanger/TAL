@@ -213,17 +213,26 @@ class Pile:
 		"""
 		"""
 		self.pile = []
-
+	
+	def see(self, index):
+		"""
+		Retourne, sans retrait, l'élément de la pile en position index 
+		en partant du sommet de la pile  
+		"""
+		if len(self.pile) > index:
+			return self.pile[len(self.pile) - 1 - index]
+		return None
+	
 	def push(self, index):
 		"""
-
+		Place index au sommet de la pile
 		"""
 		if index is not None:
 			return self.pile.append(index)
 
 	def pop(self):
 		"""
-
+		Retire le sommet de la pile si elle n'est pas vide et le retourne
 		"""
 		if len(self.pile) > 0:
 			return self.pile.pop(len(self.pile) - 1)
