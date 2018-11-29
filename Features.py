@@ -199,11 +199,9 @@ class Features:
 		return len(self.label_encoder_Y.classes_)
 		
 	def inverse_onehot_label(self,label):
-		"""if self.label_encoder_Y == LabelEncoder():
-			print("Le label_encoder_Y n'est pas entrainner, l'inversion est impossible !")
-			return None
-		print(self.label_encoder_Y.get_params())"""
-			
+		"""
+		Renvoie le label corespondant au label sous forme de one hot
+		"""
 		# reverse to_categorical
 		label = np.argmax(label, axis=0)
 		label = np.array(label).reshape(1,) # Shape pour le transform

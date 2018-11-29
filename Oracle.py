@@ -171,7 +171,6 @@ if(__name__ == "__main__"):
 
 	features = Features("Data/f1_tbp.fm")
 
-	print(features.inverse_onehot_label(all_tree))
 	for tree in all_tree:
 		# tree.print_tree()
 
