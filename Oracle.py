@@ -162,33 +162,33 @@ for tree in all_tree:
 	tree.print_tree()
 """
 if(__name__ == "__main__"):
-	# Test de la classe Oracle et Features
-	mcd =(('INDEX', 'INT'), ('FORM', 'INT'), ('LEMMA', 'INT'), ('POS', 'SYM'), ('X1', 'INT'), ('MORPHO', 'INT'), ('GOV', 'SYM'), ('LABEL', 'SYM'), ('X2', 'SYM'), ('X3', 'SYM'))
+        # Test de la classe Oracle et Features
+    mcd = (('INDEX', 'INT'), ('FORM', 'INT'), ('LEMMA', 'INT'), ('POS', 'SYM'), ('X1', 'INT'),
+           ('MORPHO', 'INT'), ('GOV', 'SYM'), ('LABEL', 'SYM'), ('X2', 'SYM'), ('X3', 'SYM'))
 
+    # Lecture du fichier conllu
+    obj_generateAlltree = ConstructAllTree("test_conllu.txt", mcd, False)
+    all_tree = obj_generateAlltree.get_allTree()
 
-	# Lecture du fichier conllu
-	obj_generateAlltree = ConstructAllTree("test_conllu.txt", mcd, False)
-	all_tree = obj_generateAlltree.get_allTree()
+    features = Features("f1_tbp.fm")
 
-	features = Features("f1_tbp.fm")
+    for tree in all_tree:
+                # tree.print_tree()
 
-	for tree in all_tree:
-		# tree.print_tree()
+        A = Oracle(tree, features)
 
-		A = Oracle(tree, features)
+        result_tree = A.run()
+        # result_tree.print_tree()
 
-		result_tree = A.run()
-		# result_tree.print_tree()
-
-	print("Liste des données (X) :")
+    """print("Liste des données (X) :")
 	print(features.datas)
 	print("Liste des labels (Y) :")
 	print(features.labels)
 	print("Nb label : ", len(features.labels))
-	print("Nb data : ", len(features.datas))
+	print("Nb data : ", len(features.datas))"""
 
-	onehot = features.convert_datas_to_one_hot()
-	#print("Final ", onehot)
+    onehot = features.convert_datas_to_one_hot()
+    print("Final ", onehot)
 
 
 """

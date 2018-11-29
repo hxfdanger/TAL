@@ -38,11 +38,11 @@ print(features.labels[1])
 print("Nb label : ", len(features.labels))
 print("Nb data : ", len(features.datas))"""
 
-X_train = features.convert_datas_to_one_hot()
+"""X_train = features.convert_datas_to_one_hot()
 print(X_train[1])
 # https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.LabelEncoder.html
 # to use LabelEncoder
-"""Y = np.asarray(features.labels)
+Y = np.asarray(features.labels)
 le = preprocessing.LabelEncoder()
 print("Y_train", Y)
 le.fit(Y)
@@ -59,7 +59,7 @@ Y2 = argmax(Y_train, axis=1)
 print(Y2)
 # reverse LabelEncoder
 Y3 = le.inverse_transform(Y2)
-print(Y3)
+print(Y3)"""
 
 
 def create_neural_network_model(num_classes, input_dim):
@@ -73,7 +73,11 @@ def create_neural_network_model(num_classes, input_dim):
     return model
 
 
-input_dim = X_train.shape[1]
-model1 = create_neural_network_model(nb_class, input_dim)
-# Train the model, iterating on the data in batches of 32 samples
-model1.fit(X_train, Y_train, epochs=1000)"""
+if(__name__ == "__main__"):
+    input_dim = X_train.shape[1]
+    model1 = create_neural_network_model(nb_class, input_dim)
+    # Train the model, iterating on the data in batches of 32 samples
+    model1.fit(X_train, Y_train, epochs=1000)
+    score = model1.evaluate(X_train, Y_train)
+    print("%s: %.2f%%" % (model1.metrics_names[1], score[1] * 100))
+    print("loss %f.2" % score[0])
