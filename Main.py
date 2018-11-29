@@ -26,18 +26,17 @@ def get_xy(file_conllu,file_features):
     mcd = get_mcd()
     obj_generateAlltree = ConstructAllTree(file_conllu, mcd, True)
 
-    all_tree = obj_generateAlltree.get_allTree()
+    all_tree = obj_generateAlltree.get_allTreeProjectiviser()[:200]
     print(all_tree)
-    exit()
-
+    #
     features = Features(file_features)
-
     for tree in all_tree:
         # tree.print_tree()
 
         A = Oracle(tree, features)
 
-        result_tree = A.run()
+        A.run()
+
     # # result_tree.print_tree()
     #
     # print("Liste des données (X) :")
@@ -69,7 +68,7 @@ def get_data(file_features,file_train_conllu,file_test_conllu):
 
 
 x_train,x_test,y_train,y_test = get_data("Data/f1_tbp.fm","Data/fr_gsd-ud-train.conllu","Data/fr_gsd-ud-test.conllu")
-
+# x_train,x_test,y_train,y_test = get_data("Data/f1_tbp.fm","test.txt","test.txt")
 print("X_train=",x_train)
 print("X_test=",x_test)
 print("X_train=",y_train)

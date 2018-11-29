@@ -1,6 +1,6 @@
-from arbre import Vertex,Tree,Liaison
+from arbre import Vertex, Tree, Liaison
 from Word import Word
-from  Projectivite import Projectivite
+from Projectivite import Projectivite
 
 import sys
 # TODO : genere une premier jeu de données d'entrainement pour le reseau avec Dicos
@@ -14,11 +14,9 @@ class ConstructAllTree:
 
     """
 
-    __author__ =    "ibrahim souleiman"
+    __author__ = "ibrahim souleiman"
 
-
-
-    def __init__(self,filename,mcd,projectivser = False):
+    def __init__(self, filename, mcd, projectivser=False):
         """
 
         :param filename: Nom du fichier
@@ -27,7 +25,7 @@ class ConstructAllTree:
         self.filename = filename
         self.mcd = mcd
         self.alltree = []
-        self.link_not_create = [] # liste des contenant lien qui ne sont pas encore créer
+        self.link_not_create = []  # liste des contenant lien qui ne sont pas encore créer
         self.generate_tree()
         self.alltreeProjectivise = []
 
@@ -53,22 +51,13 @@ class ConstructAllTree:
                     # print("ELSE=",len(self.alltreeProjectivise))
                     self.alltreeProjectivise.append(tree)
 
-
-
-
-
-
-
-
     def get_allTree(self):
         return self.alltree
 
     def get_allTreeProjectiviser(self):
         return self.alltreeProjectivise
 
-
-
-    def verify_add_newLink(self,tree,word_actual):
+    def verify_add_newLink(self, tree, word_actual):
         """
         Methode permettons de créer le lien mis de côte (c'est a dire lorsque on parcourir lineairement les fichier
         certaint mot peuvent avoir pour gouvernement de mot present plus bas pour ne pas a chaque fois parcourir les mots et trouve le
@@ -81,25 +70,22 @@ class ConstructAllTree:
         :return: efface dans la liste l'element dans  le lien a ete créer
         """
 
-        word_index = word_actual.getFeat("INDEX");
+        word_index = word_actual.getFeat("INDEX")
         id = -1
 
-        for index,word in enumerate(self.link_not_create):
+        for index, word in enumerate(self.link_not_create):
             if (word.getFeat("GOV") == word_index):
                 if(word.getFeat("LABEL") != "-"):
                     w_index = int(word.getFeat("INDEX"))
                     wactual_index = int(word_actual.getFeat("INDEX"))
-                    tree.link( wactual_index,word.getFeat("LABEL"),w_index )
-                    id  = index
+                    tree.link(wactual_index, word.getFeat("LABEL"), w_index)
+                    id = index
 
                 else:
                     print("Erreur sur le Label")
 
         if(id != -1):
             del self.link_not_create[id]
-
-
-
 
     def create_root(self):
         """
@@ -119,14 +105,7 @@ class ConstructAllTree:
         w.setFeat("X2", "root")
         w.setFeat("X3", "root")
         root = Vertex(w, None, list())
-        return  root
-
-
-
-
-
-
-
+        return root
 
     def generate_tree(self):
         """
@@ -139,38 +118,40 @@ class ConstructAllTree:
         try:
             conlluFile = open(conlluFilename, encoding='utf-8')
         except IOError:
+            print("erreur ouverture fichier", conlluFilename)
             exit(1)
 
         s = conlluFile.read()
         conlluFile.close()
-        liste_lignes = s.splitlines() # création d'une liste contenant tout les ligne du fichier
-
-
+        # création d'une liste contenant tout les ligne du fichier
+        liste_lignes = s.splitlines()
 
         tree = Tree()
 
-        for index,ligne in enumerate(liste_lignes): # pour chaque ligne du fichier
+        # pour chaque ligne du fichier
+        for index, ligne in enumerate(liste_lignes):
             root = self.create_root()
 
-            if(len(ligne) == 0): # verification dans le cas ou la ligne est vide
-                if (len(tree.get_vertices()) > 0): # si la structure arbre a ete construit pour la précedent phrase
+            if(len(ligne) == 0):  # verification dans le cas ou la ligne est vide
+                # si la structure arbre a ete construit pour la précedent phrase
+                if (len(tree.get_vertices()) > 0):
                     self.alltree.append(tree)
-                self.link_not_create = list() # réinitlisation de nôtre liste temporaire (stocke le lien qui ne sont pas encore créer) pour chaque nouvelle phrase
+                # réinitlisation de nôtre liste temporaire (stocke le lien qui ne sont pas encore créer) pour chaque nouvelle phrase
+                self.link_not_create = list()
                 tree = Tree()
 
                 next
 
             else:
                 if(ligne[0] == "#"):
-                    tokens = ligne.split() # separation de la phrase en liste qui respecter normalement
+                    tokens = ligne.split()  # separation de la phrase en liste qui respecter normalement
                 else:
-                    tokens = ligne.split("\t") # separation de la phrase en liste qui respecter normalement
+                    # separation de la phrase en liste qui respecter normalement
+                    tokens = ligne.split("\t")
 
-
-
-
-                if len(tokens) != len(self.mcd) and tokens[0]!= "#":
-                    print("Erreur :  La Taille du fichier mcd n'est pas egal a la taille du cologne de la ligne =",ligne)
+                if len(tokens) != len(self.mcd) and tokens[0] != "#":
+                    print(
+                        "Erreur :  La Taille du fichier mcd n'est pas egal a la taille du cologne de la ligne =", ligne)
                     exit()
 
                 if(tokens[0] == "#"):
@@ -190,7 +171,7 @@ class ConstructAllTree:
                         list_att_link = False
                         gov_index = 0
                         if(int(tokens[0]) == 1):
-                           tree.push(root)
+                            tree.push(root)
 
                         for i in range(0, len(tokens)):
 
@@ -199,16 +180,12 @@ class ConstructAllTree:
                             if(mcd_actual == "GOV" and tokens[i] != '-'):
                                 gov_exist = True
                                 gov_index = int(tokens[i])
-                            if(mcd_actual == "LABEL" and gov_exist==0):
+                            if(mcd_actual == "LABEL" and gov_exist == 0):
                                 bool_root = True
 
-
-
-
-                            w.setFeat(mcd_actual,tokens[i])
+                            w.setFeat(mcd_actual, tokens[i])
 
                         w.setFeat('EOS', '0')
-
 
                         if (int(w.getFeat("GOV")) < int(w.getFeat("INDEX"))):
                             """
@@ -218,14 +195,12 @@ class ConstructAllTree:
 
                         # print(w.getFeat("INDEX")," ",w.getFeat("GOV")," ",list_att_link)
 
-
-
                         if(bool_root):
                             tree.push(Vertex(w, root, list()))
                             wactual_index = int(w.getFeat("INDEX"))
-                            root_index = 0 # indice du root est à 0 pour eviter le confusion avec les mot de la phrase qui commence par 1
-                            tree.link(root_index, w.getFeat("LABEL"),  wactual_index)
-
+                            root_index = 0  # indice du root est à 0 pour eviter le confusion avec les mot de la phrase qui commence par 1
+                            tree.link(root_index, w.getFeat(
+                                "LABEL"),  wactual_index)
 
                         else:
                             tree.push(Vertex(w, None, list()))
@@ -238,8 +213,8 @@ class ConstructAllTree:
                                 wactual_index = int(w.getFeat("INDEX"))
                                 gov_index = gov_index
 
-                                tree.link(gov_index, w.getFeat("LABEL") ,wactual_index)
-
+                                tree.link(gov_index, w.getFeat(
+                                    "LABEL"), wactual_index)
 
                             else:
                                 """
@@ -248,30 +223,17 @@ class ConstructAllTree:
                                 """
                                 self.link_not_create.append(w)
 
+                    self.verify_add_newLink(tree, w)
 
-                    self.verify_add_newLink(tree,w)
-
-
-
-
-
-                    if (index == len(liste_lignes)-1):
+                    if (index == len(liste_lignes) - 1):
                         self.alltree.append(tree)
-
-
-
-
-
-
-
 
 
 if(__name__ == "__main__"):
     mcd = (('INDEX', 'INT'), ('FORM', 'INT'), ('LEMMA', 'INT'), ('POS', 'SYM'), ('X1', 'INT'), ('MORPHO', 'INT'),
            ('GOV', 'SYM'), ('LABEL', 'SYM'), ('X2', 'SYM'), ('X3', 'SYM'))
 
-    obj_generateAlltree = ConstructAllTree("test.txt",mcd,True)
-
+    obj_generateAlltree = ConstructAllTree("test.txt", mcd, True)
 
     # all_tree = obj_generateAlltree.get_allTreeProjectiviser()
     #
@@ -281,8 +243,7 @@ if(__name__ == "__main__"):
     # for tree in all_tree:
     #         tree.print_tree()
 
-
-         # for index, vertice in enumerate(tree.get_vertices()):
-         #     if(index > 0):
-         #        print(vertice.get_word().getFeat("FORM")," .............",vertice.get_parent().get_labelWord())
-         #
+    # for index, vertice in enumerate(tree.get_vertices()):
+    #     if(index > 0):
+    #        print(vertice.get_word().getFeat("FORM")," .............",vertice.get_parent().get_labelWord())
+    #
