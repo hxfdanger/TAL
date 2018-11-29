@@ -246,10 +246,10 @@ class Features:
 			forms_data.append(coefs)
 		
 		return forms_data
-	
+
 # Pour faire des One-hot
 # https://machinelearningmastery.com/how-to-one-hot-encode-sequence-data-in-python/
 
 
 if(__name__ == "__main__"):
-	features = Features("Data/f3_tbp.fm")
+    features = Features("Data/f3_tbp.fm")
