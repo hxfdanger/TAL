@@ -172,13 +172,10 @@ if(__name__ == "__main__"):
 
     features = Features("f1_tbp.fm")
 
-    for tree in all_tree:
-                # tree.print_tree()
+    A = Oracle(tree, features)
 
-        A = Oracle(tree, features)
-
-        result_tree = A.run()
-        # result_tree.print_tree()
+    result_tree = A.run()
+    # result_tree.print_tree()
 
     """print("Liste des données (X) :")
 	print(features.datas)
@@ -187,10 +184,10 @@ if(__name__ == "__main__"):
 	print("Nb label : ", len(features.labels))
 	print("Nb data : ", len(features.datas))"""
 
-    onehot = features.convert_datas_to_one_hot()
-    print("Final ", onehot)
-
-
+    onehot_X = features.convert_datas_to_one_hot()
+    print("Final X ", onehot_X)
+    onehot_Y = labels_onehot = features.convert_labels_to_one_hot()
+    print("Final Y ", onehot_Y)
 """
 def printSentence(sentence, mcd):
 	for i in range(0, len(sentence)):
