@@ -45,10 +45,12 @@ class Features:
 		self.datas = list()
 		self.labels = list()
 
-		# Labels encoders pour crée les vecteurs one hot
+		# Labels encoders pour crée les vecteurs one hot du dataset
 		self.labels_encoders = list()
 		for features in self.names:
 			self.labels_encoders.append(LabelEncoder())
+		# Label encoder pour crée les vecteurs one hot des labels
+		self.label_encoder_Y = LabelEncoder()
 
 	def extract_features(self, pile, buff, tree):
 		"""
@@ -110,24 +112,27 @@ class Features:
 		if len(data) != len(self.names):
 			print("La donnée ne posséde pas autant de features que demander !")
 			return None
-
-		new_data = list()
+		
+		#print(data)
+		new_data = list() # Liste des vecteurs one hot de data
 		for i, feature in enumerate(data):
-			tmp = np.array(feature).reshape(1, -1)
-			tmp = self.labels_encoders[i].transform(tmp)
-			new_data.append(tmp.reshape(-1))
-			new_data[-1] = to_categorical(new_data[-1], len(self.labels_encoders[i].classes_))
+			feature = np.array(feature).reshape(1,)# Shape pour le transform
+			
+			feature = self.labels_encoders[i].transform(feature)
+			feature = to_categorical(feature, len(self.labels_encoders[i].classes_))
+			
+			feature = np.array(feature).reshape(-1,)# Annulation du shape
+			
+			new_data.append(feature)
 			#print(new_data[-1])
-		#new_data = np.asarray(new_data)
-
-		#new_data = new_data.flatten()
-		# print(new_data)
+			
+		#print(new_data)
 		return new_data.copy()
 
 	def convert_datas_to_one_hot(self):
 		"""
 		Entrainent les labels encoders sur le dataset
-		Converti les self.datas en une liste de liste de vecteur one hot
+		Converti les self.datas en un vecteur one hot
 		"""
 		if len(self.datas) <= 0:
 			print(
@@ -137,22 +142,57 @@ class Features:
 		# Entrainment des labels_encoders
 		values = np.array(self.datas)
 		# print(values)
-		#values = values.reshape(np.shape(values)[0],np.shape(values)[1], 1)
 		for i, encoder in enumerate(self.labels_encoders):
 			# print(values[:,i])
-			encoder = encoder.fit(values[:, i].reshape(-1, 1))
+			encoder = encoder.fit(values[:, i])
 
 		X_data = []
 		# Convertion du dataset
 		for data in self.datas:
 			X = self.convert_data_to_one_hot(data)
-			print(X)
-			X = np.concatenate(X, axis=0)
-			print(X)
-			X_data.append(X)
+			#print(X)
+			
+			# Applatissement du vecteur X
+			X1 = np.array(X[0])
+			for i in range(0,len(X)): 
+				X1 = np.concatenate((X1,X[i]),axis=None)
+				#print(X1)
+				X_data.append(X1)
 
 		X_data = np.asarray(X_data)
 		return X_data
+		
+	def convert_labels_to_one_hot(self):
+		"""
+		Entrainent le labels encoders sur le dataset
+		Converti les self.labels en un vecteur one hot
+		"""
+		if len(self.labels) <= 0:
+			print(
+				"Les labels sont vide, il est impossible d'entrainer les labels encoders!")
+			return None
+
+		# Entrainment du labels_encoders
+		values = np.array(self.labels)
+		#print(values)
+		
+		# Entrainement du label_encoder_Y
+		self.label_encoder = self.label_encoder_Y.fit(values)
+
+		Y_data = []
+		# Convertion des labels
+		for label in self.labels:
+			label = np.array(label).reshape(1,) # Shape pour le transform
+			
+			label = self.label_encoder_Y.transform(label)
+			label = to_categorical(label, len(self.label_encoder.classes_))
+			
+			label = np.array(label).reshape(-1,) # Annulation du shape
+			#print(label)
+			Y_data.append(label)
+
+		Y_data = np.asarray(Y_data)
+		return Y_data
 
 # Pour faire des One-hot
 # https://machinelearningmastery.com/how-to-one-hot-encode-sequence-data-in-python/
