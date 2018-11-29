@@ -50,7 +50,7 @@ class Projectivite:
                                         l_liste = v_gouv_gouv.get_nodes()
 
                                         for l in l_liste:
-                                            if (l.target.get_index() == v_gouv_index):
+                                            if (l.target.get_index() == v_gouv_index and v_gouv.get_link_dep(v) is not None):
                                                 link_dep = v_gouv.get_link_dep(v).label  # y
                                                 link_gouv_gouv = l.label  # x
                                                 label = link_gouv_gouv + "|" + link_dep
@@ -58,10 +58,10 @@ class Projectivite:
                                                 tree.create_link_vertex(v_gouv_gouv, label, v)
                                                 v_gouv.delete_link_dep(v)
                                                 proj_bool = True
-                                                print("######## ",proj_bool," Projectivation =", link_gouv_gouv,"|",link_dep)
+                                                # print("######## ",proj_bool," Projectivation =", link_gouv_gouv,"|",link_dep)
 
 
-        # print("########## =",proj_bool)
+        print("########## =",proj_bool)
 
         return tree,proj_bool
 
