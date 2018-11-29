@@ -169,7 +169,7 @@ if(__name__ == "__main__"):
 	obj_generateAlltree = ConstructAllTree("test_conllu.txt", mcd, False)
 	all_tree = obj_generateAlltree.get_allTree()
 
-	features = Features("Data/f1_tbp.fm")
+	features = Features("Data/f2_tbp.fm")
 
 	for tree in all_tree:
 		# tree.print_tree()
@@ -185,15 +185,16 @@ if(__name__ == "__main__"):
 	#print(features.labels)
 	print("Nb label : ", len(features.labels))
 	print("Nb data : ", len(features.datas))
-
+	
 	onehot_X = features.convert_datas_to_one_hot()
 	#print("Final X ", onehot_X)
 	onehot_Y = labels_onehot = features.convert_labels_to_one_hot()
 	#print("Final Y ", onehot_Y)
 	
-	print(features.nombre_labels())
-	print(onehot_Y[0])
-	print(features.inverse_onehot_label(onehot_Y[0]))
+	print("Nombre de labels different : ",features.nombre_labels())
+	
+	print("Liste des mots réccuperer ",features.forms)
+	print("Mots après embedding",features.convert_forms_to_embedding("Data/embd_file_vectors/embd.vec"))
 	
 """
 def printSentence(sentence, mcd):

@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
 from keras.utils.np_utils import to_categorical
-
+from util import get_coefs_word
 
 class Features:
 	"""
@@ -19,6 +19,8 @@ class Features:
 						features_file = fichier contenant la liste des features
 		Remplie la liste des features en lisant le fichier features_file
 		"""
+		nb_form = 0 # Compte le nombre de features de type FORM
+		
 		self.names = list()
 
 		# Lecture du fichier
@@ -33,22 +35,29 @@ class Features:
 				idx = int(line[1])
 				feat = line[2]
 				self.names.append(("Pile", idx, feat))
+				if feat == 'FORM':
+					nb_form+=1
 			elif line[0] == 'B':
 				idx = int(line[1])
 				feat = line[2]
 				self.names.append(("Buffer", idx, feat))
+				if feat == 'FORM':
+					nb_form+=1
 			else:
 				self.names.append(line[0])
 		print("Features prise en compte : ", self.names)
 
 		# Dataset
+		self.nb_form = nb_form
+		self.forms = list()	# Liste des mots du dataset avant leurs embedding
 		self.datas = list()
 		self.labels = list()
 
 		# Labels encoders pour crée les vecteurs one hot du dataset
 		self.labels_encoders = list()
 		for features in self.names:
-			self.labels_encoders.append(LabelEncoder())
+			if features[2] != 'FORM':
+				self.labels_encoders.append(LabelEncoder())
 		# Label encoder pour crée les vecteurs one hot des labels
 		self.label_encoder_Y = LabelEncoder()
 
@@ -62,7 +71,8 @@ class Features:
 		ajoute à self.datas
 		"""
 		data = list()  # Liste des features de l'états courant
-
+		form = list() # Liste des mots en clair
+		
 		for feature in self.names:  #  Pour toutes les features connues
 			#print(feature)
 			if feature[0] == 'Pile':  # Si la feature concerne la pile
@@ -70,11 +80,17 @@ class Features:
 				feat = feature[2]
 				idx_pile = pile.see(idx)
 				if idx_pile != None:
-					data.append(
-						tree.vertices[idx_pile].get_elementWord(element=feat))
+					if feat == 'FORM': # Si il sagit d'un mot
+						form.append(tree.vertices[idx_pile].get_elementWord(element=feat))
+					else:
+						data.append(tree.vertices[idx_pile].get_elementWord(element=feat))		
+					
 					# print(data)
 				else:
-					data.append('NA')  # Donnée non aquise
+					if feat == 'FORM': # Si il sagit d'un mot
+						form.append('NA')  # Donnée non aquise
+					else:
+						data.append('NA')  # Donnée non aquise
 
 			elif feature[0] == 'Buffer':  # Si la feature concerne le buffer
 				idx_buff = feature[1]
@@ -86,20 +102,25 @@ class Features:
 
 				# Si la features concerne un élément hors de la phrase
 				if idx + idx_buff < 0 or idx + idx_buff >= len(tree.vertices):
-					data.append('NA')  # Donnée non aquise
+					if feat == 'FORM': # Si il sagit d'un mot
+						form.append('NA')  # Donnée non aquise
+					else:
+						data.append('NA')  # Donnée non aquise
 				else:
-					data.append(
-						tree.vertices[idx + idx_buff].get_elementWord(element=feat))
+					if feat == 'FORM': # Si il sagit d'un mot
+						form.append(tree.vertices[idx + idx_buff].get_elementWord(element=feat))
+					else:
+						data.append(tree.vertices[idx + idx_buff].get_elementWord(element=feat))
 
 			elif feature == 'DIST':  # Si la feature est une distance
 				Spile = pile.see(0)
 				Sbuff = buff.see(0)
 				if Spile != None and Sbuff != None:
-					data.append(
-						abs(tree.vertices[Spile].get_index() - tree.vertices[Sbuff].get_index()))
+					data.append(abs(tree.vertices[Spile].get_index() - tree.vertices[Sbuff].get_index()))
 				else:
 					data.append('NA')  # Donnée non aquise
-
+		
+		self.forms.append(form)
 		self.datas.append(data)
 
 		# print(data)
@@ -109,7 +130,7 @@ class Features:
 		"""
 		Converti la liste de features data en un tableau 1D de vecteur one hot
 		"""
-		if len(data) != len(self.names):
+		if len(data) != len(self.names) - self.nb_form:
 			print("La donnée ne posséde pas autant de features que demander !")
 			return None
 		
@@ -140,9 +161,10 @@ class Features:
 
 		# Entrainment des labels_encoders
 		values = np.array(self.datas)
-		# print(values)
+		#print(values.shape)
+		
 		for i, encoder in enumerate(self.labels_encoders):
-			# print(values[:,i])
+			#print(values[:,i])
 			encoder = encoder.fit(values[:, i])
 
 		X_data = []
@@ -210,6 +232,20 @@ class Features:
 		label = self.label_encoder_Y.inverse_transform(label)
 		
 		return label
+	
+	def convert_forms_to_embedding(self,path_embed):
+		"""
+		Convertie les mots de forms en utlisant l'embedding
+			path_embed : Le chemin vers le fichier d'embedding
+		"""
+		forms_data = []
+		for x in self.forms:
+			coefs = []
+			for word in x:
+				coefs.append(get_coefs_word(word, path_embed, dim_coefs=100))
+			forms_data.append(coefs)
+		
+		return forms_data
 	
 # Pour faire des One-hot
 # https://machinelearningmastery.com/how-to-one-hot-encode-sequence-data-in-python/

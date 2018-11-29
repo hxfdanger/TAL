@@ -23,5 +23,6 @@ def get_coefs_word(word, file_path_vec, dim_coefs=100):
 
 
 # test
-vec = get_coefs_word("paris", "embd.vec")
-print(vec.shape)
+if(__name__ == "__main__"):
+	vec = get_coefs_word("paris", "embd.vec")
+	print(vec.shape)
