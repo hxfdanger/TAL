@@ -64,7 +64,7 @@ class Features:
 		data = list()  # Liste des features de l'états courant
 
 		for feature in self.names:  #  Pour toutes les features connues
-			print(feature)
+			#print(feature)
 			if feature[0] == 'Pile':  # Si la feature concerne la pile
 				idx = feature[1]
 				feat = feature[2]
@@ -135,8 +135,7 @@ class Features:
 		Converti les self.datas en un vecteur one hot
 		"""
 		if len(self.datas) <= 0:
-			print(
-				"Le dataset est vide, il est impossible d'entrainer les labels encoders!")
+			print("Le dataset est vide, il est impossible d'entrainer les labels encoders!")
 			return None
 
 		# Entrainment des labels_encoders
@@ -168,8 +167,7 @@ class Features:
 		Converti les self.labels en un vecteur one hot
 		"""
 		if len(self.labels) <= 0:
-			print(
-				"Les labels sont vide, il est impossible d'entrainer les labels encoders!")
+			print("Les labels sont vide, il est impossible d'entrainer les labels encoders!")
 			return None
 
 		# Entrainment du labels_encoders
@@ -193,7 +191,28 @@ class Features:
 
 		Y_data = np.asarray(Y_data)
 		return Y_data
-
+	
+	def nombre_labels(self):
+		"""
+		Renvoie le nombre de labels differents possible
+		"""
+		return len(self.label_encoder_Y.classes_)
+		
+	def inverse_onehot_label(self,label):
+		"""if self.label_encoder_Y == LabelEncoder():
+			print("Le label_encoder_Y n'est pas entrainner, l'inversion est impossible !")
+			return None
+		print(self.label_encoder_Y.get_params())"""
+			
+		# reverse to_categorical
+		label = np.argmax(label, axis=0)
+		label = np.array(label).reshape(1,) # Shape pour le transform
+		
+		# reverse LabelEncoder
+		label = self.label_encoder_Y.inverse_transform(label)
+		
+		return label
+	
 # Pour faire des One-hot
 # https://machinelearningmastery.com/how-to-one-hot-encode-sequence-data-in-python/
 

@@ -162,9 +162,8 @@ for tree in all_tree:
 	tree.print_tree()
 """
 if(__name__ == "__main__"):
-	# Test de la classe Oracle et Features
+# Test de la classe Oracle et Features
 	mcd =(('INDEX', 'INT'), ('FORM', 'INT'), ('LEMMA', 'INT'), ('POS', 'SYM'), ('X1', 'INT'), ('MORPHO', 'INT'), ('GOV', 'SYM'), ('LABEL', 'SYM'), ('X2', 'SYM'), ('X3', 'SYM'))
-
 
 	# Lecture du fichier conllu
 	obj_generateAlltree = ConstructAllTree("test_conllu.txt", mcd, False)
@@ -172,6 +171,7 @@ if(__name__ == "__main__"):
 
 	features = Features("Data/f1_tbp.fm")
 
+	print(features.inverse_onehot_label(all_tree))
 	for tree in all_tree:
 		# tree.print_tree()
 
@@ -181,16 +181,21 @@ if(__name__ == "__main__"):
 		# result_tree.print_tree()
 
 	print("Liste des données (X) :")
-	print(features.datas)
+	#print(features.datas)
 	print("Liste des labels (Y) :")
-	print(features.labels)
+	#print(features.labels)
 	print("Nb label : ", len(features.labels))
 	print("Nb data : ", len(features.datas))
 
 	onehot_X = features.convert_datas_to_one_hot()
-	print("Final X ", onehot_X)
+	#print("Final X ", onehot_X)
 	onehot_Y = labels_onehot = features.convert_labels_to_one_hot()
-	print("Final Y ", onehot_Y)
+	#print("Final Y ", onehot_Y)
+	
+	print(features.nombre_labels())
+	print(onehot_Y[0])
+	print(features.inverse_onehot_label(onehot_Y[0]))
+	
 """
 def printSentence(sentence, mcd):
 	for i in range(0, len(sentence)):
