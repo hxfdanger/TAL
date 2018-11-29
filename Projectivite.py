@@ -31,7 +31,13 @@ class Projectivite:
                 target = link.target
 
                 middle = list(range(vertex.get_index(), target.get_index() + 1))
-                for mid in middle:
+                # print("middle=",middle)
+                #
+                # if(len(middle)>0):
+                #     middle = middle[1:-1]
+
+                # print("S=",vertex.get_index()," ","middle=",middle)
+                for mid in middle[1:-1]:
                     v = tree.index_search(mid)
                     v_gouv = v.get_parent()
                     if(v.get_parent()  is not None):
@@ -52,7 +58,7 @@ class Projectivite:
                                                 tree.create_link_vertex(v_gouv_gouv, label, v)
                                                 v_gouv.delete_link_dep(v)
                                                 proj_bool = True
-                                                # print("######## ",proj_bool," Projectivation =", link_gouv_gouv,"|",link_dep)
+                                                print("######## ",proj_bool," Projectivation =", link_gouv_gouv,"|",link_dep)
 
 
         # print("########## =",proj_bool)
