@@ -108,6 +108,14 @@ class ConstructAllTree:
         w = Word()
         w.setFeat("INDEX", 0)
         w.setFeat("FORM", "root")
+        w.setFeat("LEMMA", "root")
+        w.setFeat("POS", "root")
+        w.setFeat("X1", "root")
+        w.setFeat("MORPHO", "root")
+        w.setFeat("GOV", "root")
+        w.setFeat("LABEL", "root")
+        w.setFeat("X2", "root")
+        w.setFeat("X3", "root")
         root = Vertex(w, None, list())
         return  root
 
@@ -155,7 +163,6 @@ class ConstructAllTree:
                     tokens = ligne.split() # separation de la phrase en liste qui respecter normalement
                 else:
                     tokens = ligne.split("\t") # separation de la phrase en liste qui respecter normalement
-
 
 
 

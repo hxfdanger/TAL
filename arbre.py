@@ -219,7 +219,7 @@ class Pile:
 		Retourne, sans retrait, l'élément de la pile en position index 
 		en partant du sommet de la pile  
 		"""
-		if len(self.pile) > index:
+		if len(self.pile) > index and index >= 0:
 			return self.pile[len(self.pile) - 1 - index]
 		return None
 	
