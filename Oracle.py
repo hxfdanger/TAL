@@ -174,9 +174,13 @@ for tree in all_tree:
 			
 	A = Oracle(tree, features)
 	result_tree, X, Y = A.run()
-	#result_tree.print_tree()
-	print(X)
-	print(Y)
+	result_tree.print_tree()
+	print("X=",X)
+	print("Y=",Y)
+	break
+
+
+
 		
 """
 def printSentence(sentence, mcd):
