@@ -29,7 +29,7 @@ def get_xy(file_conllu, file_features):
     obj_generateAlltree = ConstructAllTree(file_conllu, mcd, True)
 
     all_tree = obj_generateAlltree.get_allTreeProjectiviser()
-    print(all_tree)
+    # print(all_tree)
     #
     features = Features(file_features)
     for tree in all_tree:
@@ -40,24 +40,7 @@ def get_xy(file_conllu, file_features):
         A.run()
 
     X_onehot = features.convert_datas_to_one_hot()
-    Y = np.asarray(features.labels)
-    le = preprocessing.LabelEncoder()
-    print("Y_train", Y)
-    le.fit(Y)
-    print(le.classes_)
-    nb_class = len(le.classes_)
-    print(nb_class)
-    Y1 = le.transform(Y)
-    print(Y1)
-    # use one encoder
-    Y_onehot = to_categorical(Y1, nb_class)
-    """print(Y_train)
-    # reverse to_categorical
-    Y2 = argmax(Y_train, axis=1)
-    print(Y2)
-    # reverse LabelEncoder
-    Y3 = le.inverse_transform(Y2)
-    print(Y3)"""
+    Y_onehot = features.convert_labels_to_one_hot()
 
     return X_onehot, Y_onehot
 
