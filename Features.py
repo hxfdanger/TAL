@@ -195,6 +195,49 @@ class Features:
         Y_data = np.asarray(Y_data)
         return Y_data
 
+            # Entrainment du labels_encoders
+        values = np.array(self.labels)
+         # print(values)
+
+         # Entrainement du label_encoder_Y
+         self.label_encoder = self.label_encoder_Y.fit(values)
+
+          Y_data = []
+           # Convertion des labels
+           for label in self.labels:
+                label = np.array(label).reshape(1,)  # Shape pour le transform
+
+                label = self.label_encoder_Y.transform(label)
+                label = to_categorical(label, len(self.label_encoder.classes_))
+
+                label = np.array(label).reshape(-1,)  # Annulation du shape
+                # print(label)
+                Y_data.append(label)
+
+            Y_data = np.asarray(Y_data)
+            return Y_data
+
+        def nombre_labels(self):
+            """
+            Renvoie le nombre de labels differents possible
+            """
+            return len(self.label_encoder_Y.classes_)
+
+        def inverse_onehot_label(self, label):
+            """if self.label_encoder_Y == LabelEncoder():
+                    print("Le label_encoder_Y n'est pas entrainner, l'inversion est impossible !")
+                    return None
+            print(self.label_encoder_Y.get_params())"""
+
+            # reverse to_categorical
+            label = np.argmax(label, axis=0)
+            label = np.array(label).reshape(1,)  # Shape pour le transform
+
+            # reverse LabelEncoder
+            label = self.label_encoder_Y.inverse_transform(label)
+
+            return label
+
 # Pour faire des One-hot
 # https://machinelearningmastery.com/how-to-one-hot-encode-sequence-data-in-python/
 

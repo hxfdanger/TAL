@@ -180,7 +180,7 @@ if(__name__ == "__main__"):
     """print("Liste des données (X) :")
 	print(features.datas)
 	print("Liste des labels (Y) :")
-	print(features.labels)
+	#print(features.labels)
 	print("Nb label : ", len(features.labels))
 	print("Nb data : ", len(features.datas))"""
 
