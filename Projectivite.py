@@ -61,7 +61,7 @@ class Projectivite:
                                                 # print("######## ",proj_bool," Projectivation =", link_gouv_gouv,"|",link_dep)
 
 
-        print("########## =",proj_bool)
+        # print("########## =",proj_bool)
 
         return tree,proj_bool
 
