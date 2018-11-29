@@ -163,7 +163,7 @@ mcd =(('INDEX', 'INT'), ('FORM', 'INT'), ('LEMMA', 'INT'), ('POS', 'SYM'), ('X1'
 obj_generateAlltree = ConstructAllTree("test.txt",mcd,False)
 all_tree = obj_generateAlltree.get_allTree()
 
-features = Features("f3_tbp.fm")
+features = Features("Data/f3_tbp.fm")
 
 for tree in all_tree:
 	#tree.print_tree()

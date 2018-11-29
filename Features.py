@@ -129,7 +129,7 @@ class Features:
 		values = np.array(self.datas)
 		#values = values.reshape(np.shape(values)[0],np.shape(values)[1], 1)
 		for i,encoder in enumerate(self.oneHot_encoders):
-			print(values[:,i])
+			print("Values = ",values[:,i])
 			encoder = encoder.fit(values[:,i].reshape(-1, 1))
 		
 		# Convertion du dataset
