@@ -169,8 +169,10 @@ for tree in all_tree:
 	#tree.print_tree()
 			
 	A = Oracle(tree, features)
+
 	result_tree = A.run()
 	#result_tree.print_tree()
+
 print("Liste des données (X) :")
 print(features.datas)
 print("Liste des labels (Y) :")

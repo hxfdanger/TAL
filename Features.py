@@ -161,4 +161,4 @@ class Features:
 
 
 if(__name__ == "__main__"):
-    features = Features("f3_tbp.fm")
+    features = Features("Data/f3_tbp.fm")

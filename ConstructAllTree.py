@@ -36,12 +36,15 @@ class ConstructAllTree:
             obj_proj = Projectivite()
 
             for tree in self.alltree:
+                # tree.print_tree()
 
                 proj_tree, exist = obj_proj.projectiviser(tree)
-                tree.print_tree()
+                print("Exist Proj=",exist)
 
-                if (exist == True):
-
+                if (exist == True): # projectivse l'arbre qui deprojectivser
+                    # proj_tree.print_tree()
+                    # print("####################### Projectiviser ################")
+                    # print(proj_tree.print_tree())
                     self.alltreeProjectivise.append(proj_tree)
                 else:
 
@@ -83,7 +86,7 @@ class ConstructAllTree:
                 if(word.getFeat("LABEL") != "-"):
                     w_index = int(word.getFeat("INDEX"))
                     wactual_index = int(word_actual.getFeat("INDEX"))
-                    tree.link(wactual_index,word.getFeat("LABEL"), w_index)
+                    tree.link( wactual_index,word.getFeat("LABEL"),w_index )
                     id  = index
 
                 else:
@@ -162,8 +165,6 @@ class ConstructAllTree:
 
 
 
-                #print(tokens)
-
 
                 if len(tokens) != len(self.mcd) and tokens[0]!= "#":
                     print("Erreur :  La Taille du fichier mcd n'est pas egal a la taille du cologne de la ligne =",ligne)
@@ -195,7 +196,7 @@ class ConstructAllTree:
                             if(mcd_actual == "GOV" and tokens[i] != '-'):
                                 gov_exist = True
                                 gov_index = int(tokens[i])
-                            if(mcd_actual == "LABEL" and gov_exist and tokens[i] == "root"):
+                            if(mcd_actual == "LABEL" and gov_exist==0):
                                 bool_root = True
 
 
@@ -212,11 +213,14 @@ class ConstructAllTree:
                             """
                             list_att_link = True
 
+                        # print(w.getFeat("INDEX")," ",w.getFeat("GOV")," ",list_att_link)
+
+
 
                         if(bool_root):
                             tree.push(Vertex(w, root, list()))
                             wactual_index = int(w.getFeat("INDEX"))
-                            root_index = 0 # indice du root est à 0 pour eviter le confusio avec les mot de la phrase qui commence par 1
+                            root_index = 0 # indice du root est à 0 pour eviter le confusion avec les mot de la phrase qui commence par 1
                             tree.link(root_index, w.getFeat("LABEL"),  wactual_index)
 
 
@@ -225,7 +229,8 @@ class ConstructAllTree:
 
                             if(list_att_link):
                                 """
-                                Ajouter dans la liste
+                       Ajouter directement le lien
+
                                 """
                                 wactual_index = int(w.getFeat("INDEX"))
                                 gov_index = gov_index
@@ -235,7 +240,8 @@ class ConstructAllTree:
 
                             else:
                                 """
-                                Ajouter directement le lien
+                                                                Ajouter dans la liste
+
                                 """
                                 self.link_not_create.append(w)
 
