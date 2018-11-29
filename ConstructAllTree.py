@@ -44,7 +44,7 @@ class ConstructAllTree:
                 if (exist == True): # projectivse l'arbre qui deprojectivser
                     # proj_tree.print_tree()
                     # print("####################### Projectiviser ################")
-                    print(proj_tree.print_tree())
+                    # print(proj_tree.print_tree())
                     self.alltreeProjectivise.append(proj_tree)
                 else:
 
@@ -87,7 +87,6 @@ class ConstructAllTree:
                     w_index = int(word.getFeat("INDEX"))
                     wactual_index = int(word_actual.getFeat("INDEX"))
                     tree.link( wactual_index,word.getFeat("LABEL"),w_index )
-                    print("New link ",wactual_index,word.getFeat("LABEL"),w_index  )
                     id  = index
 
                 else:
@@ -214,7 +213,7 @@ class ConstructAllTree:
                             """
                             list_att_link = True
 
-                        print(w.getFeat("INDEX")," ",w.getFeat("GOV")," ",list_att_link)
+                        # print(w.getFeat("INDEX")," ",w.getFeat("GOV")," ",list_att_link)
 
 
 
@@ -223,7 +222,6 @@ class ConstructAllTree:
                             wactual_index = int(w.getFeat("INDEX"))
                             root_index = 0 # indice du root est à 0 pour eviter le confusion avec les mot de la phrase qui commence par 1
                             tree.link(root_index, w.getFeat("LABEL"),  wactual_index)
-                            print("New Link Root ==",root_index, w.getFeat("LABEL"),  wactual_index)
 
 
                         else:
@@ -238,7 +236,6 @@ class ConstructAllTree:
                                 gov_index = gov_index
 
                                 tree.link(gov_index, w.getFeat("LABEL") ,wactual_index)
-                                print("New Link Other ==",gov_index, w.getFeat("LABEL") ,wactual_index)
 
 
                             else:

@@ -129,7 +129,7 @@ class Features:
 		values = np.array(self.datas)
 		#values = values.reshape(np.shape(values)[0],np.shape(values)[1], 1)
 		for i,encoder in enumerate(self.oneHot_encoders):
-			#print(values[:,i])
+			print(values[:,i])
 			encoder = encoder.fit(values[:,i].reshape(-1, 1))
 		
 		# Convertion du dataset
@@ -142,4 +142,4 @@ class Features:
 # https://machinelearningmastery.com/how-to-one-hot-encode-sequence-data-in-python/
 
 if(__name__ == "__main__"):
-	features = Features("f3_tbp.fm")
+	features = Features("Data/f3_tbp.fm")
