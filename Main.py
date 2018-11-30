@@ -49,9 +49,9 @@ def get_xy(file_conllu, file_features):
 
 def get_data(file_features, file_train_conllu, file_test_conllu):
 
-    # Test de la classe Oracle et Features
+        # Test de la classe Oracle et Features
 
-    # Lecture du fichier conllu
+        # Lecture du fichier conllu
 
     x_train, y_train = get_xy(file_train_conllu, file_features)
     print("first file ok")
