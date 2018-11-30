@@ -54,22 +54,19 @@ def get_xy(file_conllu,file_features):
 def get_data(file_features,file_train_conllu,file_test_conllu):
 
 
-    # Test de la classe Oracle et Features
-
     # Lecture du fichier conllu
 
     x_train,y_train = get_xy(file_train_conllu,file_features)
-    x_test,y_test = get_xy(file_test_conllu,file_features)
+    # x_test,y_test = get_xy(file_test_conllu,file_features)
 
 
-    return x_train,x_test,y_train,y_test
+    return x_train,y_train,
 
 
 
 
-x_train,x_test,y_train,y_test = get_data("Data/f1_tbp.fm","Data/fr_gsd-ud-train.conllu","Data/fr_gsd-ud-test.conllu")
+x_train,y_train = get_data("Data/f1_tbp.fm","test.txt","test.txt")
 # x_train,x_test,y_train,y_test = get_data("Data/f1_tbp.fm","test.txt","test.txt")
 print("X_train=",x_train)
-print("X_test=",x_test)
 print("X_train=",y_train)
-print("X_test=",y_test)
+

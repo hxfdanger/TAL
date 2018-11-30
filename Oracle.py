@@ -87,7 +87,7 @@ class Oracle(Automate):
                         # self.buff.push(Sbuff)
                         self.left(l)
                         self.features.labels.append("LEFT_" + l)
-                        #print("LEFT_" + l)
+                        print("LEFT_" + l)
                         flag = False
                         break
 
@@ -99,7 +99,7 @@ class Oracle(Automate):
                         # self.buff.push(Sbuff)
                         self.right(l)
                         self.features.labels.append("RIGHT_" + l)
-                        #print("RIGHT_" + l)
+                        print("RIGHT_" + l)
                         flag = False
                         break
 
@@ -129,7 +129,7 @@ class Oracle(Automate):
                         # self.buff.push(Sbuff)
                         self.reduce()
                         self.features.labels.append("REDUCE")
-                        # print("REDUCE")
+                        print("REDUCE")
                         flag = False
 
             # SHIFT
@@ -180,12 +180,12 @@ if(__name__ == "__main__"):
 		result_tree = A.run()
 		# result_tree.print_tree()
 
-	print("Liste des données (X) :")
-	print(features.datas)
-	print("Liste des labels (Y) :")
-	print(features.labels)
-	print("Nb label : ", len(features.labels))
-	print("Nb data : ", len(features.datas))
+	# print("Liste des données (X) :")
+	# print(features.datas)
+	# print("Liste des labels (Y) :")
+	# print(features.labels)
+	# print("Nb label : ", len(features.labels))
+	# print("Nb data : ", len(features.datas))
 
 	onehot = features.convert_datas_to_one_hot()
 	#print("Final ", onehot)

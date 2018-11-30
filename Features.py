@@ -62,7 +62,7 @@ class Features:
 		data = list()  # Liste des features de l'états courant
 
 		for feature in self.names:  #  Pour toutes les features connues
-			print(feature)
+			# print(feature)
 			if feature[0] == 'Pile':  # Si la feature concerne la pile
 				idx = feature[1]
 				feat = feature[2]

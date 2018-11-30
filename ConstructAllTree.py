@@ -3,7 +3,6 @@ from Word import Word
 from Projectivite import Projectivite
 
 import sys
-# TODO : genere une premier jeu de données d'entrainement pour le reseau avec Dicos
 
 
 class ConstructAllTree:
@@ -44,7 +43,7 @@ class ConstructAllTree:
                     # proj_tree.print_tree()
                     # print("####################### Projectiviser ################")
                     # print(proj_tree.print_tree())
-                    # self.alltreeProjectivise.append(proj_tree)
+                    self.alltreeProjectivise.append(proj_tree)
                     # print("IF=",len(self.alltreeProjectivise))
 
                 else:
