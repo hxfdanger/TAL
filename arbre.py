@@ -98,7 +98,16 @@ class Tree:
 			#vj.show_vertex()
 			vi.add_link(liaison)
 			vj.set_parent(vi)
-
+	
+	def compare_tree(tree1,tree2):
+		if len(tree1.vertices) != len(tree2.vertices):
+			return False
+			
+		for vertex1,vertex2 in zip(tree1.vertices,tree1.vertices):
+			if vertex1.compare_vertex(vertex2) == False:
+				return False
+		return True
+		
 
 class Vertex:
 
@@ -187,6 +196,37 @@ class Vertex:
 		Ajoute une liaison a la liste nodes
 		"""
 		self.nodes.append(liaison)
+		
+	def compare_vertex(vertex1,vertex2):
+		if vertex1 == None or vertex2 == None:
+			if vertex1 == None and vertex2 == None:
+				return True
+			else:
+				return False
+				
+		if vertex1.get_index() != vertex2.get_index():
+			return False
+		if vertex1.get_labelWord() != vertex2.get_labelWord():
+			return False
+		if vertex1.get_elementWord() != vertex2.get_elementWord():
+			return False
+		
+		if vertex1.parent != None and vertex2.parent == None:
+			return False
+		if vertex1.parent == None and vertex2.parent != None:
+			return False
+		if vertex1.parent != None and vertex2.parent != None:
+			if vertex1.parent.get_labelWord() != vertex2.parent.get_labelWord():
+				return False
+		
+		if len(vertex1.nodes) != len(vertex2.nodes):
+			return False
+		
+		for node1,node2 in zip(vertex1.nodes,vertex2.nodes):
+			if node1.label != node2.label:
+				return False
+		
+		return True
 
 
 class Liaison:

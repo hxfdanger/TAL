@@ -75,7 +75,7 @@ class Oracle(Automate):
 
 			Spile = self.pile.see(0)
 			Sbuff = self.buff.see(0)
-			# print("Spile : ", Spile, " Sbuff : ", Sbuff)
+			print("Spile : ", Spile, " Sbuff : ", Sbuff)
 
 			self.features.extract_features(self.pile, self.buff, self.tree)
 
@@ -83,11 +83,9 @@ class Oracle(Automate):
 			if Spile is not None:
 				for l in self.labels:
 					if self.present_in_tree(self.target_tree, Sbuff, l, Spile):
-						# self.pile.push(Spile)
-						# self.buff.push(Sbuff)
 						self.left(l)
 						self.features.labels.append("LEFT_" + l)
-						#print("LEFT_" + l)
+						print("LEFT_" + l)
 						flag = False
 						break
 
@@ -95,11 +93,9 @@ class Oracle(Automate):
 			if flag and Spile is not None:
 				for l in self.labels:
 					if self.present_in_tree(self.target_tree, Spile, l, Sbuff):
-						# self.pile.push(Spile)
-						# self.buff.push(Sbuff)
 						self.right(l)
 						self.features.labels.append("RIGHT_" + l)
-						#print("RIGHT_" + l)
+						print("RIGHT_" + l)
 						flag = False
 						break
 
@@ -125,19 +121,15 @@ class Oracle(Automate):
 				# Si on a crée toutes les dépendances du sommet de pile
 				if nb_dependances == nb_dependant or self.buff.len() == 0:
 					if self.tree.index_search(Spile).parent is not None or self.tree.vertices[Spile].get_word().getFeat('FORM') == "root":
-						# self.pile.push(Spile)
-						# self.buff.push(Sbuff)
 						self.reduce()
 						self.features.labels.append("REDUCE")
-						# print("REDUCE")
+						print("REDUCE")
 						flag = False
 
 			# SHIFT
 			if flag:
 				self.features.labels.append("SHIFT")
-				# print("SHIFT")
-				# self.pile.push(Spile)
-				# self.buff.push(Sbuff)
+				print("SHIFT")
 				self.shift()
 
 		return self.tree
@@ -167,10 +159,27 @@ if(__name__ == "__main__"):
 		   ('MORPHO', 'INT'), ('GOV', 'SYM'), ('LABEL', 'SYM'), ('X2', 'SYM'), ('X3', 'SYM'))
 
 	# Lecture du fichier conllu
-	obj_generateAlltree = ConstructAllTree("test_conllu.txt", mcd, True)
-	all_tree = obj_generateAlltree.get_allTreeProjectiviser()
+	obj_generateAlltree = ConstructAllTree("Data/test_conllu.txt", mcd, False)
+	all_tree = obj_generateAlltree.get_allTree()
+	
+	print(len(all_tree))
+	print(all_tree[0].print_tree())
+	t1 = all_tree[0]
+	
+	pp =Projectivite()
+	all_tree[0],exist = pp.projectiviser(all_tree[0])
+	
+	t2 = all_tree[0]
+	
+	print(t1.compare_tree(t2))
+	
+	phrase = 483
+	
+	sys.exit(0)
+	
+	#all_tree[phrase].print_tree()
 
-	features = Features("Data/f2_tbp.fm")
+	features = Features("Data/f1_tbp.fm")	
 	
 	for tree in all_tree:
 		A = Oracle(tree, features)
