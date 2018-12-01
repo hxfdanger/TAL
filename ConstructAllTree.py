@@ -32,13 +32,12 @@ class ConstructAllTree:
             obj_proj=Projectivite ()
 
             for tree in self.alltree:
-                tree.print_tree()
-                exit()
+                # tree.print_tree()
+                #exit()
                 proj_tree, exist=obj_proj.projectiviser (tree)
                 # print("Exist Proj=",exist)
 
                 if (exist == True):  # projectivse l'arbre qui deprojectivser
-                    pass
                     # proj_tree.print_tree()
                     # print("####################### Projectiviser ################")
                     # print(proj_tree.print_tree())

@@ -61,6 +61,7 @@ class Projectivite:
                         label=link.label
                         label_parent=parent_GOV.get_link_dep (vertex).get_label ()
                         new_label=label_parent + "|" + label
+                        w=target.word.setFeat ("LABEL", new_label)
                         # print("Nouveau label ",new_label)
 
                         # Changer le pére de TARGET
@@ -77,6 +78,10 @@ class Projectivite:
                         proj_end=False
 
                 """for mid in middle[1:-1]: # Pour tout les sommets entre le début et la fin de link
+                    print("Mid ",mid)
+                    v = tree.index_search(mid)
+                    v_gouv = v.get_parent()
+                    for mid in middle[1:-1]: # Pour tout les sommets entre le début et la fin de link
                     print("Mid ",mid)
                     v = tree.index_search(mid)
                     v_gouv = v.get_parent()
