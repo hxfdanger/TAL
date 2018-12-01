@@ -1,6 +1,7 @@
 """
 Main classe Principale
 """
+
 from keras.utils.np_utils import to_categorical
 from sklearn import preprocessing
 import numpy as np
@@ -27,37 +28,43 @@ def set_mcd(mcd):
 
 def get_xy(file_conllu, file_features):
     mcd = get_mcd()
-    obj_generateAlltree = ConstructAllTree(file_conllu, mcd, True)
 
-    all_tree = obj_generateAlltree.get_allTreeProjectiviser()[:2]
-    print(len(all_tree))
-    # print(all_tree)
+    print("Chargement des arbres")
+    obj_generateAlltree = ConstructAllTree(file_conllu, mcd, True)
+    all_tree = obj_generateAlltree.get_allTreeProjectiviser()
+    print(all_tree[0].print_tree())
     #
+
+    print("Création du dataset")
     features = Features(file_features)
+    i = 0
     for tree in all_tree:
         # tree.print_tree()
+        print(i)
+        i += 1
 
         A = Oracle(tree, features)
-
         A.run()
 
-    X_onehot = features.convert_datas_to_one_hot()
-    Y_onehot = features.convert_labels_to_one_hot()
+    print("Convertion du dataset")
+    print(features)
 
-    return X_onehot, Y_onehot
+    # X_onehot=features.convert_datas_to_one_hot ()
+    # Y_onehot = features.convert_labels_to_one_hot()
+    #
+    # return X_onehot, Y_onehot
 
 
 def get_data(file_features, file_train_conllu, file_test_conllu):
 
-        # Test de la classe Oracle et Features
+    # Test de la classe Oracle et Features
 
-        # Lecture du fichier conllu
+    # Lecture du fichier conllu
 
     x_train, y_train = get_xy(file_train_conllu, file_features)
-    print("first file ok")
-    x_test, y_test = get_xy(file_test_conllu, file_features)
+    # x_test, y_test = get_xy(file_test_conllu, file_features)
 
-    return x_train, x_test, y_train, y_test
+    return x_train, y_train
 
 
 if(__name__ == "__main__"):
