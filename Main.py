@@ -8,67 +8,68 @@ import numpy as np
 from numpy import argmax
 from ConstructAllTree import *
 from Features import *
-
 from Oracle import *
 
 
 def get_mcd():
-	mcd = (
-		('INDEX', 'INT'), ('FORM', 'INT'), ('LEMMA','INT'), ('POS', 'SYM'), ('X1', 'INT'), ('MORPHO', 'INT'),
-		('GOV', 'SYM'), ('LABEL', 'SYM'), ('X2', 'SYM'), ('X3', 'SYM'))
+    mcd = (
+        ('INDEX', 'INT'), ('FORM', 'INT'), ('LEMMA',
+                                            'INT'), ('POS', 'SYM'), ('X1', 'INT'), ('MORPHO', 'INT'),
+        ('GOV', 'SYM'), ('LABEL', 'SYM'), ('X2', 'SYM'), ('X3', 'SYM'))
 
-	return mcd
+    return mcd
 
 
 def set_mcd(mcd):
-	mcd = mcd
+    mcd = mcd
 
 
-def get_xy(file_conllu, file_features):
-	mcd = get_mcd()
-
-	print("Chargement des arbres")
-	obj_generateAlltree = ConstructAllTree(file_conllu, mcd, True)
-	all_tree = obj_generateAlltree.get_allTreeProjectiviser()
-	#print(all_tree[0].print_tree())
-	print("Arbres charger : ",len(all_tree))
-
-	print("Création du dataset")
-	features = Features(file_features)
-	i = 0
-	for tree in all_tree:
-		i+=1
-		if i%1000 == 0:
-			print(i)
-		
-		#tree.print_tree()
-		#if i != 43 and i != 61:
-		A = Oracle(tree, features)
-		A.run()
-
-	print("Convertion du dataset")
-
+<<<<<<< HEAD
 	X_onehot = features.convert_datas_to_one_hot ()
 	Y_onehot = features.convert_labels_to_one_hot()
 	
 	return X_onehot, Y_onehot
+=======
+def get_xy(file_conllu, file_features, file_embedding=None):
+    mcd = get_mcd()
+>>>>>>> 8302ee78b0c760bef2c6bc401075f74f8fd05571
+
+    print("Chargement des arbres")
+    obj_generateAlltree = ConstructAllTree(file_conllu, mcd, True)
+    all_tree = obj_generateAlltree.get_allTreeProjectiviser()[:1]
+    # print(all_tree[0].print_tree())
+    print("Arbres charger : ", len(all_tree))
+
+    print("Création du dataset")
+    features = Features(file_features)
+    i = 0
+    for tree in all_tree:
+        i += 1
+        if i % 1000 == 0:
+            print(i)
+        # tree.print_tree()
+        # if i != 43 and i != 61:
+        A = Oracle(tree, features)
+        A.run()
+
+    print("Convertion du dataset")
+    print("file_embedding : ", file_embedding)
+    X, Y = features.get_Data_Set(file_embedding)
+    """X_onehot = features.convert_datas_to_one_hot()
+    Y_onehot = features.convert_labels_to_one_hot()"""
+    exit()
+    return X, Y
 
 
+def get_data(file_features, file_train_conllu, file_embedding=None):
 
-def get_data(file_features, file_train_conllu, file_test_conllu):
+    x_train, y_train = get_xy(file_train_conllu, file_features, file_embedding)
 
-	# Test de la classe Oracle et Features
-
-	# Lecture du fichier conllu
-
-
-	x_train, y_train = get_xy(file_train_conllu, file_features)
-	# x_test, y_test = get_xy(file_test_conllu, file_features)
-
-	return x_train, y_train
+    return x_train, y_train
 
 
 if(__name__ == "__main__"):
+<<<<<<< HEAD
 
 
 	# On', 'ne', 'peut', 'éviter', 'de', 'penser', 'à', "l'", 'actualité', 'caractérisée', 'par', "l'", 'enlèvement', 'de', 'les', 'otages', 'à', 'le', 'Niger'
@@ -78,3 +79,25 @@ if(__name__ == "__main__"):
 	# x_train,x_test,y_train,y_test = get_data("Data/f1_tbp.fm","test.txt","test.txt")
 	print("X_train=", x_train.shape)
 	print("Y_train=", y_train.shape)
+=======
+    features_file = "Data/f2_tbp.fm"
+    #conllu_file = "Data/fr_gsd-ud-train.conllu"
+    conllu_file = "Data/test_conllu.txt"
+    weight_embedding_file = "Data/embd.vec"
+    x_train, y_train = get_data(
+        features_file, conllu_file, weight_embedding_file)
+    # x_train,x_test,y_train,y_test = get_data("Data/f1_tbp.fm","test.txt","test.txt")
+    print("x_train=", x_train.shape)
+    print("Y_train=", y_train.shape)
+
+    input_dim = x_train.shape[1]
+    print("input_dim= ", input_dim)
+    nb_class = y_train.shape[1]
+    print("nb_class= ", nb_class)
+    model1 = create_neural_network_model(nb_class, input_dim)
+    # Train the model, iterating on the data in batches of 32 samples
+    model1.fit(x_train, y_train, epochs=1000)
+    score = model1.evaluate(x_test, y_test)
+    print("%s: %.2f%%" % (model1.metrics_names[1], score[1] * 100))
+    print("loss %f.2" % score[0])
+>>>>>>> 8302ee78b0c760bef2c6bc401075f74f8fd05571

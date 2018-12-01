@@ -5,6 +5,7 @@ from sklearn.preprocessing import OneHotEncoder
 from keras.utils.np_utils import to_categorical
 from util import get_coefs_word
 
+
 class Features:
 	"""
 	Objectif :
