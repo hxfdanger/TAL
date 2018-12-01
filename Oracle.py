@@ -81,7 +81,11 @@ class Oracle(Automate):
 			#print("Spile : ", Spile, " Sbuff : ", Sbuff)
 			#self.pile.print_pile()
 			
-			self.features.extract_features(self.pile, self.buff, self.tree)
+			data, form = self.features.extract_features(self.pile, self.buff, self.tree)
+			if form != None:
+				self.features.forms.append(form)
+			self.features.datas.append(data)
+			
 			
 			#if Spile == 13 and Sbuff == 14:
 				#sys.exit(0)

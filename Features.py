@@ -67,8 +67,7 @@ class Features:
 						pile = La pile courante
 						buff = Le buffer courant
 						tree = L'arbre courant
-		Extrait les features de l'état courant (pile,buff,tree) et les
-		ajoute à self.datas
+		Extrait les features de l'état courant (pile,buff,tree) et les retourne
 		"""
 		data = list()  # Liste des features de l'états courant
 		form = list() # Liste des mots en clair
@@ -121,12 +120,11 @@ class Features:
 				else:
 					data.append('NA')  # Donnée non aquise
 		
-		if len(form) > 0:
-			self.forms.append(form)
-		self.datas.append(data)
-
 		# print(data)
-		return data
+		if len(form) > 0:
+			return data, form
+		else:
+			return data, None
 
 	def convert_data_to_one_hot(self, data):
 		"""

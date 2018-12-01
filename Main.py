@@ -48,7 +48,7 @@ def get_xy(file_conllu, file_features):
 
 	print("Convertion du dataset")
 
-	X_onehot=features.convert_datas_to_one_hot ()
+	X_onehot = features.convert_datas_to_one_hot ()
 	Y_onehot = features.convert_labels_to_one_hot()
 	
 	return X_onehot, Y_onehot
@@ -74,7 +74,7 @@ if(__name__ == "__main__"):
 	# On', 'ne', 'peut', 'éviter', 'de', 'penser', 'à', "l'", 'actualité', 'caractérisée', 'par', "l'", 'enlèvement', 'de', 'les', 'otages', 'à', 'le', 'Niger'
 
 
-	x_train, y_train = get_data( "Data/f1_tbp.fm", "Data/fr_gsd-ud-train.conllu", "Data/fr_gsd-ud-test.conllu")
+	x_train, y_train = get_data( "Data/f1_tbp.fm", "Data/test_conllu.txt", "Data/fr_gsd-ud-test.conllu")
 	# x_train,x_test,y_train,y_test = get_data("Data/f1_tbp.fm","test.txt","test.txt")
 	print("X_train=", x_train.shape)
 	print("Y_train=", y_train.shape)
