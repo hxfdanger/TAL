@@ -35,7 +35,7 @@ class Oracle(Automate):
         for word in sentence:
             # print(word.getFeat('FORM'))
             l = word.getFeat('LABEL')
-            self.name=
+            self.name=word.getFeat('FORM') # pour voir la phrase
             if l is not None:  # Si l n'est pas liée au root
                 if l not in self.labels:  # Si l n'est pas déjà dans la liste
                     self.labels.append(l)
