@@ -214,7 +214,7 @@ class Features:
 
 		Y_data = np.asarray(Y_data)
 		return Y_data
-	
+
 	def nombre_labels(self):
 		"""
 		Renvoie le nombre de labels differents possible
