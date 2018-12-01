@@ -50,7 +50,7 @@ def get_xy(file_conllu, file_features, file_embedding=None):
     print("file_embedding : ", file_embedding)
     X, Y = features.get_Data_Set(file_embedding)
     """X_onehot = features.convert_datas_to_one_hot()
-    Y_onehot = features.convert_labels_to_one_hot()"""
+	Y_onehot = features.convert_labels_to_one_hot()"""
     return X, Y
 
 

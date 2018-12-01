@@ -11,10 +11,16 @@ class Automate:
                 pile=Pile
                 buff=Pile
                 tree=Tree
+                
+                clf = Un classifieur entrainner
+                features = Un objet features decrivant les features à utliser
         """
         self.pile = pile
         self.buff = buff
         self.tree = tree
+        
+        self.clf = clf
+        self.features = features
 
     def __init__(self, sentence=[]):
         """
@@ -96,7 +102,12 @@ class Automate:
         """
         while not self.fin():
             #self.tree.print_tree()
-            t = random.choice(range(4))  # Oracle transition
+            
+            data, form = self.features.extract_features(self.pile, self.buff, self.tree)
+            
+            
+            t =  clf.predit( # Oracle transition
+            
             if t == 0:
                 #print("shift")
                 self.shift()
