@@ -32,7 +32,7 @@ class ConstructAllTree:
             obj_proj=Projectivite ()
 
             for tree in self.alltree:
-                # tree.print_tree()
+
                 #exit()
                 proj_tree, exist=obj_proj.projectiviser (tree)
                 # print("Exist Proj=",exist)
@@ -252,5 +252,4 @@ if (__name__ == "__main__"):
 
 # for index, vertice in enumerate(tree.get_vertices()):
 #     if(index > 0):
-#        print(vertice.get_word().getFeat("FORM")," .............",vertice.get_parent().get_labelWord())
-#
+#        print(vertice.get_word().getFeat("FORM"),

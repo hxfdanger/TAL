@@ -33,7 +33,7 @@ class Oracle(Automate):
 
 		self.labels = list()
 		for word in sentence:
-			# print(word.getFeat('FORM'))
+			#print(word.getFeat('FORM'),'\t',word.getFeat('LABEL'))
 			l = word.getFeat('LABEL')
 			self.name=word.getFeat('FORM') # pour voir la phrase
 			if l is not None:  # Si l n'est pas liée au root
@@ -73,26 +73,27 @@ class Oracle(Automate):
 		"""
 
 		while not self.fin():
-			self.tree.print_tree()
+			#self.tree.print_tree()
 			flag = True
 
 			Spile = self.pile.see(0)
 			Sbuff = self.buff.see(0)
-			print("Spile : ", Spile, " Sbuff : ", Sbuff)
+			#print("Spile : ", Spile, " Sbuff : ", Sbuff)
 			#self.pile.print_pile()
 			
 			self.features.extract_features(self.pile, self.buff, self.tree)
 			
-			if Spile == 24 and Sbuff == None:
-				sys.exit(0)
-			print("labels : ",self.labels)
+			#if Spile == 13 and Sbuff == 14:
+				#sys.exit(0)
+			#print("labels : ",self.labels)
+			
 			# LEFT_l
 			if Spile is not None:
 				for l in self.labels:
 					if self.present_in_tree(self.target_tree, Sbuff, l, Spile):
 						self.left(l)
 						self.features.labels.append("LEFT_" + l)
-						print("LEFT_" + l)#," ",self.labels)
+						#print("LEFT_" + l)#," ",self.labels)
 						flag = False
 						break
 
@@ -102,7 +103,7 @@ class Oracle(Automate):
 					if self.present_in_tree(self.target_tree, Spile, l, Sbuff):
 						self.right(l)
 						self.features.labels.append("RIGHT_" + l)
-						print("RIGHT_" + l)#," ",self.labels)
+						#print("RIGHT_" + l)#," ",self.labels)
 						flag = False
 						break
 
@@ -131,6 +132,7 @@ class Oracle(Automate):
 				nodes_tree = self.tree.vertices[Spile].get_nodes()
 				nodes_target = self.target_tree.vertices[Spile].get_nodes()
 				
+				# Compte le nombre de dépandence de Spile dans target_tree qui sont aussi dans tree
 				nb_dependant = len(nodes_target)
 				for link1 in nodes_target:
 					for link2 in nodes_tree:
@@ -140,18 +142,18 @@ class Oracle(Automate):
 				# print(nb_dependances,nb_dependant)
 				# print(self.tree.vertices[Spile].get_word().getFeat('FORM'))
 				# Si on a crée toutes les dépendances du sommet de pile
-				print("Dep : ",nb_dependances," ",nb_dependant)
+				#print("Dep : ",nb_dependances," ",nb_dependant)
 				if nb_dependances == nb_dependant or self.buff.len() == 0:
 					if self.tree.index_search(Spile).parent is not None or self.tree.vertices[Spile].get_word().getFeat('FORM') == "root":
 						self.reduce()
 						self.features.labels.append("REDUCE")
-						print("REDUCE")#," ",self.labels)
+						#print("REDUCE")#," ",self.labels)
 						flag = False
 
 			# SHIFT
 			if flag:
 				self.features.labels.append("SHIFT")
-				print("SHIFT")# ",self.labels)
+				#print("SHIFT")# ",self.labels)
 				self.shift()
 
 		return self.tree
@@ -198,12 +200,12 @@ if(__name__ == "__main__"):
 	features = Features("Data/f1_tbp.fm")
 	
 	A = Oracle(t2, features)
-	result_tree = A.run()
+	print(A.labels)
 	
+	
+	result_tree = A.run()
 	sys.exit(0)
-
-	#all_tree[phrase].print_tree()
-
+	
 	features = Features("Data/f1_tbp.fm")
 
 	for tree in all_tree:
