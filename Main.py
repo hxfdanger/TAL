@@ -30,6 +30,7 @@ def get_xy(file_conllu, file_features, file_embedding=None):
 
     print("Chargement des arbres")
     obj_generateAlltree = ConstructAllTree(file_conllu, mcd, True)
+
     all_tree = obj_generateAlltree.get_allTreeProjectiviser()[:2]
     # print(all_tree[0].print_tree())
     print("Arbres charger : ", len(all_tree))
@@ -50,6 +51,7 @@ def get_xy(file_conllu, file_features, file_embedding=None):
     print("file_embedding : ", file_embedding)
     X, Y = features.get_Data_Set(file_embedding)
     """X_onehot = features.convert_datas_to_one_hot()
+
 	Y_onehot = features.convert_labels_to_one_hot()"""
     return X, Y
 
@@ -64,10 +66,10 @@ def get_data(file_features, file_train_conllu, file_embedding=None):
 if(__name__ == "__main__"):
     features_file = "Data/f2_tbp.fm"
     #conllu_file = "Data/fr_gsd-ud-train.conllu"
-    conllu_file = "Data/test_conllu.txt"
-    weight_embedding_file = "Data/embd.vec"
+    conllu_file = "Data/fr_gsd-ud-train.conllu"
+    weight_embedding_file = "Data/embd_file_vectors/embd.vec"
     x_train, y_train = get_data(
-        features_file, conllu_file)
+        features_file, conllu_file, weight_embedding_file)
     # x_train,x_test,y_train,y_test = get_data("Data/f1_tbp.fm","test.txt","test.txt")
     print("x_train=", x_train.shape)
     print("Y_train=", y_train.shape)
@@ -81,4 +83,5 @@ if(__name__ == "__main__"):
     model1.fit(x_train, y_train, epochs=1000)
     """score = model1.evaluate(x_test, y_test)
     print("%s: %.2f%%" % (model1.metrics_names[1], score[1] * 100))
+
     print("loss %f.2" % score[0])"""

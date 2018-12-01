@@ -28,7 +28,7 @@ class Oracle(Automate):
 		for vt in target_tree.vertices:
 			sentence.append(vt.get_word())
 
-		Automate.__init__(self, sentence)
+		Automate.__init__(self, None, None, sentence)
 		self.target_tree = target_tree
 
 		self.labels = list()
