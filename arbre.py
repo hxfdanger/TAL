@@ -1,5 +1,5 @@
 from Word import Word
-
+import numpy as np
 
 class Tree:
 
@@ -100,6 +100,11 @@ class Tree:
 			vj.set_parent(vi)
 	
 	def compare_tree(tree1,tree2):
+		"""
+		ATENTION fonction qui ne marche pas !!
+		
+		Renvoie True si les deux arbre sont identique
+		"""
 		if len(tree1.vertices) != len(tree2.vertices):
 			return False
 			
@@ -107,6 +112,39 @@ class Tree:
 			if vertex1.compare_vertex(vertex2) == False:
 				return False
 		return True
+		
+	def return_sous_arbre(self,index):
+		"""
+		Renvoie le tableau (des indices) du sous arbres partant du noeud index
+		index est l'indice du noeud racine du sous arbre 
+		"""
+		if index >= len(self.vertices) or index < 0:
+			print("Arbre : Impossible de calculer le sous arbre, l'index est hors du tableau")
+		
+		vertex = self.index_search(index)
+		
+		sous_arbre = list()
+		sous_arbre.append(vertex)
+		
+		for vertex in sous_arbre:
+			#vertex.show_liaison()
+			nodes = vertex.get_nodes()
+			
+			targets = list()
+			for node in nodes:
+				targets.append(node.get_target())
+			
+			for target in targets:
+				sous_arbre.append(target)
+			
+			"""for i,vertex in enumerate(sous_arbre):
+				print(vertex.get_index(),end=' ')
+			print()"""
+		
+		for i,vertex in enumerate(sous_arbre):
+			sous_arbre[i] = vertex.get_index()
+			
+		return np.asarray(sous_arbre)
 		
 
 class Vertex:
@@ -198,6 +236,9 @@ class Vertex:
 		self.nodes.append(liaison)
 		
 	def compare_vertex(vertex1,vertex2):
+		"""
+		ATENTION Non foncitonnel !!
+		"""
 		if vertex1 == None or vertex2 == None:
 			if vertex1 == None and vertex2 == None:
 				return True
@@ -280,3 +321,8 @@ class Pile:
 
 	def len(self):
 		return len(self.pile)
+		
+	def print_pile(self):
+		for i in range(len(self.pile)):
+			print(self.pile[i],end=' ')
+		print()
