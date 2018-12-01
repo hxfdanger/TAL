@@ -8,6 +8,7 @@ from Features import Features
 
 class Oracle(Automate):
 
+
     """
     Objectif :
                     Construire les configurations et les transitions corespondantes d'un arbre
@@ -23,6 +24,7 @@ class Oracle(Automate):
         labels est la liste des different labels de la phrase
         """
         sentence = list()
+        self.name = list()
         for vt in target_tree.vertices:
             sentence.append(vt.get_word())
 
@@ -33,6 +35,7 @@ class Oracle(Automate):
         for word in sentence:
             # print(word.getFeat('FORM'))
             l = word.getFeat('LABEL')
+            self.name=
             if l is not None:  # Si l n'est pas liée au root
                 if l not in self.labels:  # Si l n'est pas déjà dans la liste
                     self.labels.append(l)
@@ -75,7 +78,7 @@ class Oracle(Automate):
 
             Spile = self.pile.see(0)
             Sbuff = self.buff.see(0)
-            # print("Spile : ", Spile, " Sbuff : ", Sbuff)
+            # print("Spile : ", Spile, " Sbuff : ", Sbuff," ",self.buff)
 
             self.features.extract_features(self.pile, self.buff, self.tree)
 
@@ -83,11 +86,9 @@ class Oracle(Automate):
             if Spile is not None:
                 for l in self.labels:
                     if self.present_in_tree(self.target_tree, Sbuff, l, Spile):
-                        # self.pile.push(Spile)
-                        # self.buff.push(Sbuff)
                         self.left(l)
                         self.features.labels.append("LEFT_" + l)
-                        print("LEFT_" + l)
+                        print("LEFT_" + l," ",self.labels)
                         flag = False
                         break
 
@@ -95,11 +96,9 @@ class Oracle(Automate):
             if flag and Spile is not None:
                 for l in self.labels:
                     if self.present_in_tree(self.target_tree, Spile, l, Sbuff):
-                        # self.pile.push(Spile)
-                        # self.buff.push(Sbuff)
                         self.right(l)
                         self.features.labels.append("RIGHT_" + l)
-                        print("RIGHT_" + l)
+                        print("RIGHT_" + l," ",self.labels)
                         flag = False
                         break
 
@@ -125,19 +124,15 @@ class Oracle(Automate):
                 # Si on a crée toutes les dépendances du sommet de pile
                 if nb_dependances == nb_dependant or self.buff.len() == 0:
                     if self.tree.index_search(Spile).parent is not None or self.tree.vertices[Spile].get_word().getFeat('FORM') == "root":
-                        # self.pile.push(Spile)
-                        # self.buff.push(Sbuff)
                         self.reduce()
                         self.features.labels.append("REDUCE")
-                        print("REDUCE")
+                        print("REDUCE"," ",self.labels)
                         flag = False
 
             # SHIFT
             if flag:
                 self.features.labels.append("SHIFT")
-                # print("SHIFT")
-                # self.pile.push(Spile)
-                # self.buff.push(Sbuff)
+                print("SHIFT"," ",self.labels)
                 self.shift()
 
         return self.tree
@@ -153,78 +148,62 @@ obj_generateAlltree = ConstructAllTree("test.txt",mcd,True)
 all_tree = obj_generateAlltree.get_allTree()
 
 for tree in all_tree:
-	sentence = list()
-	for vt in tree.vertices:
-		sentence.append(vt.get_word())
+    sentence = list()
+    for vt in tree.vertices:
+        sentence.append(vt.get_word())
 
-	automate = Automate(sentence=sentence)
-	tree = automate.run()
-	tree.print_tree()
+    automate = Automate(sentence=sentence)
+    tree = automate.run()
+    tree.print_tree()
 """
 if(__name__ == "__main__"):
-	# Test de la classe Oracle et Features
-	mcd =(('INDEX', 'INT'), ('FORM', 'INT'), ('LEMMA', 'INT'), ('POS', 'SYM'), ('X1', 'INT'), ('MORPHO', 'INT'), ('GOV', 'SYM'), ('LABEL', 'SYM'), ('X2', 'SYM'), ('X3', 'SYM'))
+        # Test de la classe Oracle et Features
+    mcd = (('INDEX', 'INT'), ('FORM', 'INT'), ('LEMMA', 'INT'), ('POS', 'SYM'), ('X1', 'INT'),
+           ('MORPHO', 'INT'), ('GOV', 'SYM'), ('LABEL', 'SYM'), ('X2', 'SYM'), ('X3', 'SYM'))
+
+    # Lecture du fichier conllu
+    obj_generateAlltree = ConstructAllTree("Data/test_conllu.txt", mcd, False)
+    all_tree = obj_generateAlltree.get_allTree()
+
+    print(len(all_tree))
+    print(all_tree[0].print_tree())
+    t1 = all_tree[0]
+
+    pp =Projectivite()
+    all_tree[0],exist = pp.projectiviser(all_tree[0])
+
+    t2 = all_tree[0]
+
+    print(t1.compare_tree(t2))
+
+    phrase = 483
+
+    sys.exit(0)
+
+    #all_tree[phrase].print_tree()
+
+    features = Features("Data/f1_tbp.fm")
+
+    for tree in all_tree:
+        A = Oracle(tree, features)
+
+        result_tree = A.run()
+        # result_tree.print_tree()
 
 
-	# Lecture du fichier conllu
-	obj_generateAlltree = ConstructAllTree("test_conllu.txt", mcd, False)
-	all_tree = obj_generateAlltree.get_allTree()
+    #print("Liste des données (X) :")
+    #print(features.datas)
+    #print("Liste des labels (Y) :")
+    #print(features.labels)
+    print("Nb label : ", len(features.labels))
+    print("Nb data : ", len(features.datas))
 
-	features = Features("f1_tbp.fm")
+    onehot_X = features.convert_datas_to_one_hot()
+    #print("Final X ", onehot_X)
+    onehot_Y = labels_onehot = features.convert_labels_to_one_hot()
+    #print("Final Y ", onehot_Y)
 
-	for tree in all_tree:
-		# tree.print_tree()
+    print("Nombre de labels different : ",features.nombre_labels())
 
-		A = Oracle(tree, features)
-
-		result_tree = A.run()
-		# result_tree.print_tree()
-
-	# print("Liste des données (X) :")
-	# print(features.datas)
-	# print("Liste des labels (Y) :")
-	# print(features.labels)
-	# print("Nb label : ", len(features.labels))
-	# print("Nb data : ", len(features.datas))
-
-	onehot = features.convert_datas_to_one_hot()
-	#print("Final ", onehot)
-
-
-"""
-def printSentence(sentence, mcd):
-	for i in range(0, len(sentence)):
-		sentence[i].affiche(mcd)
-
-wb = WordBuffer(mcd);
-wb.readFromConlluFile("test.txt"); #../UD_Japanese-Modern/ja_modern-ud-test.conllu  ../UD_French-GSD/fr_gsd-ud-test.conllu
-
-for i in range(0,int(sys.argv[1])):
-	sentence = wb.nextSentence()
-
-mots = list()
-for j in range(0, len(sentence)):
-	mots.append(sentence[j].getFeat('FORM'))
-print("N° : ",i+1, mots)
-
-for i in range(0,104):
-	sentence = wb.nextSentence()
-
-for i in range(1,int(sys.argv[1])):
-	sentence = wb.nextSentence()
-
-	mots = list()
-	for j in range(0, len(sentence)):
-		mots.append(sentence[j].getFeat('FORM'))
-	print("N° : ",i, mots)
-
-	A = Oracle(sentence,mots)
-	tree = A.run()
-
-while sentence:
-	#print('sentence', sentNb)
-	#printSentence(sentence, mcd)
-
-	sentNb += 1
-	sentence = wb.nextSentence()
-"""
+    print("Liste des mots réccuperer ",features.forms)
+    print("Mots après embedding",features.convert_forms_to_embedding("Data/embd_file_vectors/embd.vec"))
