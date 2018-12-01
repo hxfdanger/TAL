@@ -177,6 +177,7 @@ for tree in all_tree:
 	tree = automate.run()
 	tree.print_tree()
 """
+
 if(__name__ == "__main__"):
 		# Test de la classe Oracle et Features
 	mcd = (('INDEX', 'INT'), ('FORM', 'INT'), ('LEMMA', 'INT'), ('POS', 'SYM'), ('X1', 'INT'),
