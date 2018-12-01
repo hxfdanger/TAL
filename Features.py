@@ -253,10 +253,28 @@ class Features:
         for x in self.forms:
             coefs = []
             for word in x:
-                coefs.append(get_coefs_word(word, path_embed, dim_coefs=100))
+                vec = get_coefs_word(word, path_embed, dim_coefs=100)
+                coefs.append(vec)
+
+            coefs = np.array(coefs)
+            coefs = coefs.flatten()
             forms_data.append(coefs)
 
-        return forms_data
+        X = np.asarray(forms_data)
+        return X
+
+    def get_Data_Set(self, file_embedding=None):
+        onehot_X = self.convert_datas_to_one_hot()
+        # print("Final X ", onehot_X)
+        onehot_Y = self.convert_labels_to_one_hot()
+        # print("Final Y ", onehot_Y)
+        X = onehot_X
+        if(file_embedding is not None):
+            words = self.convert_forms_to_embedding(file_embedding)
+            X = np.column_stack((words, onehot_X))
+
+        return X, onehot_Y
+
 
 # Pour faire des One-hot
 # https://machinelearningmastery.com/how-to-one-hot-encode-sequence-data-in-python/
