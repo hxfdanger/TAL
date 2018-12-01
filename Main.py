@@ -38,20 +38,20 @@ def get_xy(file_conllu, file_features):
 	i = 0
 	for tree in all_tree:
 		i+=1
-		print(i)
+		if i%1000 == 0:
+			print(i)
 		
-		tree.print_tree()
-		if i != 43 and i != 61:
-			A = Oracle(tree, features)
-			A.run()
+		#tree.print_tree()
+		#if i != 43 and i != 61:
+		A = Oracle(tree, features)
+		A.run()
 
 	print("Convertion du dataset")
-	print(features)
 
-	# X_onehot=features.convert_datas_to_one_hot ()
-	# Y_onehot = features.convert_labels_to_one_hot()
-	#
-	# return X_onehot, Y_onehot
+	X_onehot=features.convert_datas_to_one_hot ()
+	Y_onehot = features.convert_labels_to_one_hot()
+	
+	return X_onehot, Y_onehot
 
 
 
