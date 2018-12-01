@@ -64,12 +64,12 @@ def get_data(file_features, file_train_conllu, file_embedding=None):
 
 
 if(__name__ == "__main__"):
-    features_file = "Data/f1_tbp.fm"
+    features_file = "Data/f2_tbp.fm"
     #conllu_file = "Data/fr_gsd-ud-train.conllu"
     conllu_file = "Data/fr_gsd-ud-train.conllu"
-    weight_embedding_file = "Data/embd.vec"
+    weight_embedding_file = "Data/embd_file_vectors/embd.vec"
     x_train, y_train = get_data(
-        features_file, conllu_file)
+        features_file, conllu_file, weight_embedding_file)
     # x_train,x_test,y_train,y_test = get_data("Data/f1_tbp.fm","test.txt","test.txt")
     print("x_train=", x_train.shape)
     print("Y_train=", y_train.shape)
