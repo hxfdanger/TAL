@@ -85,7 +85,7 @@ class Oracle(Automate):
 			
 			if Spile == 24 and Sbuff == None:
 				sys.exit(0)
-			
+			print("labels : ",self.labels)
 			# LEFT_l
 			if Spile is not None:
 				for l in self.labels:
@@ -108,21 +108,35 @@ class Oracle(Automate):
 
 			# REDUCE
 			if flag and Spile is not None:
-				nb_dependant = 0
-				nb_dependances = 0
-				for vertex_i in self.tree.vertices:  # Pour tous les mots
+				#self.tree.print_tree()
+				#print("Spile : ", Spile, " Sbuff : ", Sbuff)
+				
+				nb_dependant = 0 # Nombre de dépandant à Spile dans target_tree 
+				nb_dependances = 0 # Nombre de dépandant à Spile dans tree
+				"""for vertex_i in self.tree.vertices:  # Pour tous les mots
 					# if vertex_i.parent == None:
 					#	continue
 					for l in self.labels:  # Pour tous les labels possible
 						# Si le Spile gouverne vertex
 						if self.present_in_tree(self.target_tree, Spile, l, vertex_i.get_index()):
 							nb_dependant += 1
-							#print(vertex_i.get_word()," Label ", l)
+							print("Target ",vertex_i.get_labelWord()," Label ", l)
 							# if vertex_i.get_word() == 'Trois' and l == 'nummod':
 							#	sys.exit(0)
 							# Si cette liaison a déjà était ajouter a l'arbre
-							if self.present_in_tree(self.tree, Spile, l, vertex_i.get_index()):
-								nb_dependances += 1
+						if self.present_in_tree(self.tree, Spile, l, vertex_i.get_index()):
+							nb_dependances += 1
+							print("Tree ",vertex_i.get_labelWord()," Label ", l)
+				"""
+				nodes_tree = self.tree.vertices[Spile].get_nodes()
+				nodes_target = self.target_tree.vertices[Spile].get_nodes()
+				
+				nb_dependant = len(nodes_target)
+				for link1 in nodes_target:
+					for link2 in nodes_tree:
+						if link1.compare_links(link2):
+							nb_dependances += 1
+							
 				# print(nb_dependances,nb_dependant)
 				# print(self.tree.vertices[Spile].get_word().getFeat('FORM'))
 				# Si on a crée toutes les dépendances du sommet de pile
@@ -173,7 +187,7 @@ if(__name__ == "__main__"):
 	print(len(all_tree))
 	t1 = all_tree[0]
 	t1.print_tree()
-	sys.exit(0)
+	
 	pp =Projectivite()
 	t2,exist = pp.projectiviser(t1)
 
@@ -185,7 +199,7 @@ if(__name__ == "__main__"):
 	A = Oracle(t2, features)
 	result_tree = A.run()
 	
-	
+	sys.exit(0)
 
 	#all_tree[phrase].print_tree()
 

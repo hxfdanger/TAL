@@ -287,6 +287,13 @@ class Liaison:
 
 	def get_label(self):
 		return self.label
+		
+	def compare_links(self,link2):
+		if self.get_target().get_index() != link2.get_target().get_index():
+			return False
+		if self.get_label() != link2.get_label():
+			return False
+		return True
 
 
 class Pile:
