@@ -37,12 +37,13 @@ def get_xy(file_conllu, file_features):
 	features = Features(file_features)
 	i = 0
 	for tree in all_tree:
-		print(i)
 		i+=1
-		tree.print_tree()
+		print(i)
 		
-		A = Oracle(tree, features)
-		A.run()
+		tree.print_tree()
+		if i != 43 and i != 61:
+			A = Oracle(tree, features)
+			A.run()
 
 	print("Convertion du dataset")
 	print(features)

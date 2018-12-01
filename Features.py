@@ -121,7 +121,8 @@ class Features:
 				else:
 					data.append('NA')  # Donnée non aquise
 		
-		self.forms.append(form)
+		if len(form) > 0:
+			self.forms.append(form)
 		self.datas.append(data)
 
 		# print(data)

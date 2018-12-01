@@ -225,7 +225,7 @@ class ConstructAllTree:
 					self.verify_add_newLink(tree, w)
 
 					if (index == len(liste_lignes) - 1):
-						tree.print_tree()
+						#tree.print_tree()
 						self.alltree.append(tree)
 
 

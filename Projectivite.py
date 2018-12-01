@@ -64,6 +64,7 @@ class Projectivite:
 						label = link.label
 						label_parent = parent_GOV.get_link_dep(vertex).get_label()
 						new_label = label_parent +"|"+ label
+						w = target.word.setFeat("LABEL",new_label)
 						#print("Nouveau label ",new_label)
 						
 						# Changer le pére de TARGET
