@@ -18,10 +18,9 @@ class Word:
             print(self.getFeat(feat), '\t', end='')
         print('')
 
-        
     @staticmethod
     def fakeWord(mcd):
-        w =Word()
+        w = Word()
         for elt in mcd:
             feat, status = elt
             w.setFeat(feat, 'ROOT')
@@ -34,4 +33,3 @@ class Word:
     @staticmethod
     def invalidLabel():
         return ''
-

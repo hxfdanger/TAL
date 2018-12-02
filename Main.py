@@ -32,7 +32,7 @@ def get_xy(file_conllu, file_features, file_embedding=None):
     print("Chargement des arbres")
     obj_generateAlltree = ConstructAllTree(file_conllu, mcd, True)
 
-    all_tree = obj_generateAlltree.get_allTreeProjectiviser()[:1000]
+    all_tree = obj_generateAlltree.get_allTreeProjectiviser()
     # print(all_tree[0].print_tree())
     print("Arbres charger : ", len(all_tree))
 
@@ -66,34 +66,17 @@ def get_data(file_features, file_train_conllu, file_embedding=None):
 
 if(__name__ == "__main__"):
 
-    features_file = "Data/f2_tbp.fm"
+    features_file = "Data/f1_tbp.fm"
     #conllu_file = "Data/fr_gsd-ud-train.conllu"
-    conllu_file = "Data/fr_gsd-ud-train.conllu"
-    weight_embedding_file = "Data/embd__fr_50.vec"
+    conllu_file = "UD_French-GSD/fr_gsd-ud-train.conllu"
+    weight_embedding_file = "Data/embd_fr_50.vec"
     x_train, y_train = get_data(
-        features_file, conllu_file, weight_embedding_file)
+        features_file, conllu_file)
     # x_train,x_test,y_train,y_test = get_data("Data/f1_tbp.fm","test.txt","test.txt")
     print("x_train=", x_train.shape)
     print("Y_train=", y_train.shape)
     print("save file")
-    outfile_X = "X.npy"
-    outfile_Y = "Y.npy"
+    """outfile_X = "X_f3_JAP.npy"
+    outfile_Y = "Y_f3_JAP.npy"
     np.save(outfile_X, x_train)
-    np.save(outfile_Y, y_train)
-
-    print("start_train")
-
-    """input_dim = x_train.shape[1]
-    print("input_dim= ", input_dim)
-    nb_class = y_train.shape[1]
-    print("nb_class= ", nb_class)
-    model = create_neural_network_model(nb_class, input_dim)
-    # Train the model, iterating on the data in batches of 32 samples
-    model1.fit(x_train, y_train, epochs=1000)
-
-    """
-    """score = model1.evaluate(x_test, y_test)
-    print("%s: %.2f%%" % (model1.metrics_names[1], score[1] * 100))
-
-    model.save('model_f2.h5')  # creates a HDF5 file 'my_model.h5'
-    del model  # deletes the existing model"""
+    np.save(outfile_Y, y_train)"""

@@ -93,6 +93,8 @@ class WordBuffer:
                                 self.corpus.append(tokens[i])
                         if i == 2:
                             w.setFeat('LEMMA', tokens[i])
+                            if (tokens[i] not in self.corpus):
+                                self.corpus.append(tokens[i])
                         if i == 3:
                             w.setFeat('POS', tokens[i])
                         if i == 4:

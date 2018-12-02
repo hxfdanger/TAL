@@ -37,7 +37,7 @@ def prepare_docs(t, docs):
 
 def load_embeding_weight(file_path):
     embeddings_index = dict()
-    f = open('pre_trained_words/fb_fr/wiki.fr.vec')
+    f = open(file_path)
     for line in f:
         values = line.split()
         word = values[0]
@@ -67,15 +67,12 @@ def create_input_matrix(embeddings_index, vocab_size, t, dim_input):
     return embedding_matrix
 
 
-def create_embedding_model(vocab_size, weight_matrix, pre_trained=True, dim_input=300, trainable=True, input_length=1):
+def create_embedding_model(vocab_size, dim_input=300, trainable=True, input_length=1):
 
     model = Sequential()
-    if(pre_trained):
-        e = Embedding(vocab_size, dim_input, weights=[
-            weight_matrix], trainable=trainable, input_length=input_length)
-    else:
-        e = Embedding(vocab_size, dim_input, trainable=True,
-                      input_length=input_length)
+
+    e = Embedding(vocab_size, dim_input, trainable=True,
+                  input_length=input_length)
 
     model.add(e)
     # compile the model
@@ -85,7 +82,7 @@ def create_embedding_model(vocab_size, weight_matrix, pre_trained=True, dim_inpu
 
 
 def save_weight_matrix(file, output_array, padded_docs, token):
-    fichier = open("embd.vec", "w")
+    fichier = open(file, "w")
     for word, i in token.word_index.items():
         itemindex = np.where(padded_docs[:, 0] == i)
         try:
@@ -115,33 +112,29 @@ def save_weight_matrix(file, output_array, padded_docs, token):
 
 # test how use embedding
 # exemple create model without pre_trained weight
-file_conllu = "UD_French-GSD/fr_gsd-ud-train.conllu"
-pre_trained_file = "pre_trained_words/fb_fr/wiki.fr.vec"
-save_file_for_wright = "embd.vec"
+file_conllu = "UD_Japanese-Modern/ja_modern-ud-test.conllu"
+#pre_trained_file = "pre_trained_words/fb_fr/wiki.fr.vec"
+save_file_for_wright = "embd_JAP_50.vec"
 
 docs = create_corpus(file_conllu)
-
+print("length docs: ", len(docs))
 
 token = prepare_tokenizer(docs)
+
 vocab_size = len(token.word_index) + 1
 encoded_docs, padded_docs = prepare_docs(token, docs)
-embeddings_index = load_embeding_weight(pre_trained_file)
+#embeddings_index = load_embeding_weight(pre_trained_file)
 # if u use a pre_trained model, make sure that u use put the same dim in the pre-trained_file
-dim_input = 300
-weight_matrix = create_input_matrix(
-    embeddings_index, vocab_size, token, dim_input)
+#dim_input = 300
+# weight_matrix = create_input_matrix(
+#    embeddings_index, vocab_size, token, dim_input)"""
 
 # i will not use the pre_trained weight in this exemple 'pre_trained=False'
 # so i will make 'dim_input=100' to represent a vector's word dim
 model = create_embedding_model(
-    vocab_size, weight_matrix, pre_trained=False, dim_input=100, trainable=True)
+    vocab_size, dim_input=50, trainable=True)
 output_array = model.predict(padded_docs)
 save_weight_matrix(save_file_for_wright, output_array, padded_docs, token)
 
-model.save('my_model.h5')
 
-del model  # deletes the existing model
-
-# returns a compiled model
-# identical to the previous one
-model = load_model('my_model.h5')
+# fin file

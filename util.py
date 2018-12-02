@@ -54,9 +54,9 @@ def get_coefs_word_fast(word, dict, dim_coefs=100):
 
 # test
 if(__name__ == "__main__"):
-    vec = get_coefs_word("ras zebbi", "Data/embd.vec")
+    vec = get_coefs_word("ras zebbi", "Data/embd__fr_50.vec")
     print(vec.shape)
     dict = charger_model("Data/embd.vec")
-    vec = get_coefs_word_fast("ras zebbi", dict, dim_coefs=100)
+    vec = get_coefs_word_fast("ras zebbi", dict, dim_coefs=50)
     print(vec.shape)
     print(vec)

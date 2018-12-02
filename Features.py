@@ -129,11 +129,11 @@ class Features:
 
         self.forms.append(form)
         self.datas.append(data)
-        
+
         if len(form) <= 0:
-			return data, None
-		else:
-			return data, form
+            return data, None
+        else:
+            return data, form
 
     def convert_data_to_one_hot(self, data):
         """
@@ -181,6 +181,7 @@ class Features:
         X_data = []
         # Convertion du dataset
         for data in self.datas:
+
             X = self.convert_data_to_one_hot(data)
             # print(X)
             # Applatissement du vecteur X
