@@ -188,13 +188,13 @@ if(__name__ == "__main__"):
 		   ('MORPHO', 'INT'), ('GOV', 'SYM'), ('LABEL', 'SYM'), ('X2', 'SYM'), ('X3', 'SYM'))
 
 	# Lecture du fichier conllu
-	obj_generateAlltree = ConstructAllTree("Data/test_conllu.txt", mcd, False)
+	obj_generateAlltree = ConstructAllTree("Data/fr_gsd-ud-train.conllu", mcd, False)
 	all_tree = obj_generateAlltree.get_allTree()
 
 	print(len(all_tree))
 	t1 = all_tree[0]
 	t1.print_tree()
-	
+
 	pp =Projectivite()
 	t2,exist = pp.projectiviser(t1)
 

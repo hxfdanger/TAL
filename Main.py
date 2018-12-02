@@ -31,8 +31,13 @@ def get_xy(file_conllu, file_features, file_embedding=None):
 
     print("Chargement des arbres")
     obj_generateAlltree = ConstructAllTree(file_conllu, mcd, True)
+    print(obj_generateAlltree.get_corpus())
+    print(obj_generateAlltree.get_vocabulary())
+
+    exit()
 
     all_tree = obj_generateAlltree.get_allTreeProjectiviser()[:2]
+    # print(all_tree)
     # print(all_tree[0].print_tree())
     print("Arbres charger : ", len(all_tree))
 
@@ -47,6 +52,12 @@ def get_xy(file_conllu, file_features, file_embedding=None):
         # if i != 43 and i != 61:
         A = Oracle(tree, features)
         A.run()
+    #
+    print(features.datas)
+    #
+    # print(features.labels_encoders)
+
+
 
     print("Convertion du dataset")
     print("file_embedding : ", file_embedding)
@@ -66,23 +77,26 @@ def get_data(file_features, file_train_conllu, file_embedding=None):
 
 if(__name__ == "__main__"):
 
-    features_file = "Data/f2_tbp.fm"
+    features_file = "Data/f1_tbp.fm"
     #conllu_file = "Data/fr_gsd-ud-train.conllu"
-    conllu_file = "Data/fr_gsd-ud-train.conllu"
-    weight_embedding_file = "Data/embd_file_vectors/embd.vec"
+    # conllu_file = "Data/fr_gsd-ud-train.conllu"
+    conllu_file = "test.txt"
+    # weight_embedding_file = "embd_file_vectors/embd.vec"
     x_train, y_train = get_data(
         features_file, conllu_file)
     # x_train,x_test,y_train,y_test = get_data("Data/f1_tbp.fm","test.txt","test.txt")
     print("x_train=", x_train.shape)
+    print("X=",x_train[0])
     print("Y_train=", y_train.shape)
+    print("Y=",y_train[0])
     print("start_train")
     input_dim = x_train.shape[1]
     print("input_dim= ", input_dim)
     nb_class = y_train.shape[1]
     print("nb_class= ", nb_class)
-    model1 = create_neural_network_model(nb_class, input_dim)
-    # Train the model, iterating on the data in batches of 32 samples
-    model1.fit(x_train, y_train, epochs=1000)
+    # model1 = create_neural_network_model(nb_class, input_dim)
+    # # Train the model, iterating on the data in batches of 32 samples
+    # model1.fit(x_train, y_train, epochs=1000)
 
     """score = model1.evaluate(x_test, y_test)
     print("%s: %.2f%%" % (model1.metrics_names[1], score[1] * 100))
