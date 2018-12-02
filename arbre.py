@@ -173,6 +173,8 @@ class Vertex:
         return self.word.getFeat ("FORM")
 
     def get_elementWord(self, element="LABEL"):
+        print("WORD=",self.word)
+
         return self.word.getFeat (element)
 
     def get_nodes(self):
