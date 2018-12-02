@@ -62,8 +62,25 @@ class Features:
         # Label encoder pour crée les vecteurs one hot des labels
         self.label_encoder_Y = LabelEncoder()
 
+
+    def get_label_encoderX(self):
+        return self.labels_encoders
+
+    def set_label_encoderX(self,encoder):
+        self.labels_encoders = encoder
+
+    def get_label_encoderY(self):
+        return self.label_encoder_Y
+
+    def set_label_encoderY(self, encoder):
+        self.label_encoder_Y=encoder
+
+
+
+
+
+
     def extract_features(self, pile, buff, tree):
-        print("EXTRACT.........")
         """
         input:
                                         pile = La pile courante
@@ -116,7 +133,6 @@ class Features:
                         form.append(
                             tree.vertices[idx + idx_buff].get_elementWord(element=feat))
                     else:
-                        print("Feature Data",tree.vertices[idx + idx_buff]," WOrd=",tree.vertices[idx + idx_buff].get_word())
                         data.append(
                             tree.vertices[idx + idx_buff].get_elementWord(element=feat))
 
@@ -134,7 +150,7 @@ class Features:
 
         self.forms.append(form)
         self.datas.append(data)
-        
+
         if len(form) <= 0:
             return data, None
 
@@ -155,8 +171,7 @@ class Features:
             feature = np.array(feature).reshape(1,)  # Shape pour le transform
 
             feature = self.labels_encoders[i].transform(feature)
-            feature = to_categorical(feature, len(
-                self.labels_encoders[i].classes_))
+            feature = to_categorical(feature, len(self.labels_encoders[i].classes_))
 
             feature = np.array(feature).reshape(-1,)  # Annulation du shape
 
@@ -258,7 +273,7 @@ class Features:
         """
         dict = charger_model(path_embed)
         forms_data = []
-        for x in self.forms:33
+        for x in self.forms:
             coefs = []
             for word in x:
                 vec = get_coefs_word_fast(word, dict, dim_coefs=50)
@@ -269,6 +284,9 @@ class Features:
             forms_data.append(coefs)
 
         X = np.asarray(forms_data)
+
+
+
         return X
 
     def get_Data_Set(self, file_embedding=None):
