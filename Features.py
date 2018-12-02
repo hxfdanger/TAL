@@ -249,12 +249,12 @@ class Features:
         Convertie les mots de forms en utlisant l'embedding
                 path_embed : Le chemin vers le fichier d'embedding
         """
-        dict = charger_model("Data/embd.vec")
+        dict = charger_model(path_embed)
         forms_data = []
         for x in self.forms:
             coefs = []
             for word in x:
-                vec = get_coefs_word_fast(word, dict, dim_coefs=100)
+                vec = get_coefs_word_fast(word, dict, dim_coefs=50)
                 coefs.append(vec)
 
             coefs = np.array(coefs)
