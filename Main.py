@@ -32,7 +32,7 @@ def get_xy(file_conllu, file_features, file_embedding=None):
     print("Chargement des arbres")
     obj_generateAlltree = ConstructAllTree(file_conllu, mcd, True)
 
-    all_tree = obj_generateAlltree.get_allTreeProjectiviser()[:2]
+    all_tree = obj_generateAlltree.get_allTreeProjectiviser()[:1000]
     # print(all_tree[0].print_tree())
     print("Arbres charger : ", len(all_tree))
 
@@ -69,13 +69,20 @@ if(__name__ == "__main__"):
     features_file = "Data/f2_tbp.fm"
     #conllu_file = "Data/fr_gsd-ud-train.conllu"
     conllu_file = "Data/fr_gsd-ud-train.conllu"
-    weight_embedding_file = "Data/embd.vec"
+    weight_embedding_file = "Data/embd__fr_50.vec"
     x_train, y_train = get_data(
-        features_file, conllu_file)
+        features_file, conllu_file, weight_embedding_file)
     # x_train,x_test,y_train,y_test = get_data("Data/f1_tbp.fm","test.txt","test.txt")
     print("x_train=", x_train.shape)
     print("Y_train=", y_train.shape)
+    print("save file")
+    outfile_X = "X.npy"
+    outfile_Y = "Y.npy"
+    np.save(outfile_X, x_train)
+    np.save(outfile_Y, y_train)
+
     print("start_train")
+
     """input_dim = x_train.shape[1]
     print("input_dim= ", input_dim)
     nb_class = y_train.shape[1]
