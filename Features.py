@@ -62,6 +62,18 @@ class Features:
         # Label encoder pour crée les vecteurs one hot des labels
         self.label_encoder_Y = LabelEncoder()
 
+    def get_label_encoderX(self):
+        return self.labels_encoders
+
+    def set_label_encoderX(self, encoder):
+        self.labels_encoders = encoder
+
+    def get_label_encoderY(self):
+        return self.label_encoder_Y
+
+    def set_label_encoderY(self, encoder):
+        self.label_encoder_Y = encoder
+
     def extract_features(self, pile, buff, tree):
         """
         input:
@@ -132,6 +144,7 @@ class Features:
 
         if len(form) <= 0:
             return data, None
+
         else:
             return data, form
 
@@ -267,6 +280,7 @@ class Features:
             forms_data.append(coefs)
 
         X = np.asarray(forms_data)
+
         return X
 
     def get_Data_Set(self, file_embedding=None):

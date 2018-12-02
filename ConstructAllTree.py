@@ -3,6 +3,7 @@ from Word import Word
 from Projectivite import Projectivite
 
 import sys
+import json
 
 
 class ConstructAllTree:
@@ -14,6 +15,8 @@ class ConstructAllTree:
 
     __author__="ibrahim souleiman"
 
+
+
     def __init__(self, filename, mcd, projectivser=False):
         """
 
@@ -24,6 +27,10 @@ class ConstructAllTree:
         self.mcd=mcd
         self.alltree=[]
         self.link_not_create=[]  # liste des contenant lien qui ne sont pas encore créer
+        self.corpus = list() # liste contenant une liste pour chaque mot d'une phrase [[a,bcc,dsds],[fdfd,fdfd]]
+        self.vocabulary = list()
+
+
         self.generate_tree ()
         self.alltreeProjectivise=[]
 
@@ -50,6 +57,12 @@ class ConstructAllTree:
 
     def get_allTree(self):
         return self.alltree
+
+    def get_corpus(self):
+        return self.corpus
+
+    def get_vocabulary(self):
+        return self.vocabulary
 
     def get_allTreeProjectiviser(self):
         return self.alltreeProjectivise
@@ -145,12 +158,14 @@ class ConstructAllTree:
                 # réinitlisation de nôtre liste temporaire (stocke le lien qui ne sont pas encore créer) pour chaque nouvelle phrase
                 self.link_not_create=list ()
                 tree=Tree ()
+                self.corpus.append(listes_word)
 
                 next
 
             else:
                 if (ligne[0] == "#"):  # Si la ligne est un commentaire
                     tokens=ligne.split ()  # separation de la phrase en liste qui respecter normalement
+                    listes_word = list()
                 else:
                     # separation de la phrase en liste qui respecter normalement
                     tokens=ligne.split ("\t")
@@ -189,6 +204,12 @@ class ConstructAllTree:
                                 gov_index=int (tokens[i])
                             if (mcd_actual == "LABEL" and gov_exist == 0):
                                 bool_root=True
+                            if(mcd_actual == "FORM"):
+                                word_form = tokens[i]
+                                listes_word.append(tokens[i])
+                                if(tokens[i] not in self.vocabulary):
+                                     self.vocabulary.append(tokens[i])
+
 
                             w.setFeat (mcd_actual, tokens[i])
 
@@ -233,6 +254,7 @@ class ConstructAllTree:
 
                     if (index == len (liste_lignes) - 1):
                         tree.print_tree ()
+                        self.corpus.append (listes_word)
                         self.alltree.append (tree)
 
 

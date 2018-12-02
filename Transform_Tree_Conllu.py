@@ -1,5 +1,5 @@
 
-from Main import  get_mcd
+from Main import  *
 from ConstructAllTree import  ConstructAllTree
 """
 Classe qui va prendre en paramètre un tree et constuire sont fichier 
@@ -149,7 +149,7 @@ class TransformTreeConllu:
                     print(ligne)
                     tokens=ligne.split ("\t")
                     if '-' not in tokens[0]:
-
+                        print("Taille du graphe=",len(self.alltree)," Graphe=",indice_tree," Vertices=",index_vertice)
                         parent=self.alltree[indice_tree].get_vertices()[index_vertice].get_parent()
                         vertice = self.alltree[indice_tree].get_vertices()[index_vertice]
                         gouv = parent.get_word().getFeat("INDEX")
@@ -174,9 +174,11 @@ class TransformTreeConllu:
 if(__name__ == "__main__"):
 
 
-    obj_generateAlltree=ConstructAllTree ("test.txt", get_mcd(), True)
-    all_tree=obj_generateAlltree.get_allTreeProjectiviser ()
-    file_genarate = TransformTreeConllu(all_tree,"generate_data.txt","test.txt")
+    obj_generateAlltree=ConstructAllTree ("Data/fr_gsd-ud-tr.conllu", get_mcd(), False)
+    all_tree=obj_generateAlltree.get_allTree()
+
+    print(len(all_tree))
+    file_genarate = TransformTreeConllu(all_tree,"generate_data.txt","Data/fr_gsd-ud-tr.conllu")
 
     # print(all_tree[0].print_tree())
 
