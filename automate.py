@@ -4,6 +4,7 @@ import random
 
 class Automate:
 
+
 	def __init__(self, pile, buff, tree, clf, features):
 		"""
 		constructor: Automate

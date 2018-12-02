@@ -211,8 +211,8 @@ if(__name__ == "__main__"):
 	for tree in all_tree:
 		A = Oracle(tree, features)
 
-		result_tree = A.run()
-		# result_tree.print_tree()
+		result_tree = A.run
+    # result_tree.print_tree()
 
 
 	#print("Liste des données (X) :")

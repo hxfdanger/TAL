@@ -9,6 +9,7 @@ from numpy import argmax
 from ConstructAllTree import *
 from Features import *
 from Oracle import *
+
 from neural_network import create_neural_network_model
 
 
@@ -64,12 +65,13 @@ def get_data(file_features, file_train_conllu, file_embedding=None):
 
 
 if(__name__ == "__main__"):
+
     features_file = "Data/f2_tbp.fm"
     #conllu_file = "Data/fr_gsd-ud-train.conllu"
     conllu_file = "Data/fr_gsd-ud-train.conllu"
     weight_embedding_file = "Data/embd.vec"
     x_train, y_train = get_data(
-        features_file, conllu_file, weight_embedding_file)
+        features_file, conllu_file)
     # x_train,x_test,y_train,y_test = get_data("Data/f1_tbp.fm","test.txt","test.txt")
     print("x_train=", x_train.shape)
     print("Y_train=", y_train.shape)
@@ -80,7 +82,11 @@ if(__name__ == "__main__"):
     print("nb_class= ", nb_class)
     model = create_neural_network_model(nb_class, input_dim)
     # Train the model, iterating on the data in batches of 32 samples
-    model.fit(x_train, y_train, epochs=1000)
+    model1.fit(x_train, y_train, epochs=1000)
+
+    """
+    """score = model1.evaluate(x_test, y_test)
+    print("%s: %.2f%%" % (model1.metrics_names[1], score[1] * 100))
 
     model.save('model_f2.h5')  # creates a HDF5 file 'my_model.h5'
     del model  # deletes the existing model"""
