@@ -182,15 +182,17 @@ class Features:
         for data in self.datas:
             X = self.convert_data_to_one_hot(data)
             # print(X)
-
             # Applatissement du vecteur X
             X1 = np.array(X[0])
+            #print("X0.shape :", X[0].shape)
             for i in range(0, len(X)):
+                #print("Xi.shape :", X[i].shape)
                 X1 = np.concatenate((X1, X[i]), axis=None)
 
             X_data.append(X1)
 
         X_data = np.asarray(X_data)
+        # print(X_data[0].shape)
         return X_data
 
     def convert_labels_to_one_hot(self):
@@ -251,6 +253,7 @@ class Features:
         """
         dict = charger_model(path_embed)
         forms_data = []
+        i = 0
         for x in self.forms:
             coefs = []
             for word in x:
@@ -270,8 +273,10 @@ class Features:
         onehot_Y = self.convert_labels_to_one_hot()
         # print("Final Y ", onehot_Y)
         X = onehot_X
+        print("X_onehot shape ", onehot_X.shape)
         if(file_embedding is not None):
             words = self.convert_forms_to_embedding(file_embedding)
+            print("words embedding shape", words.shape)
             X = np.column_stack((words, onehot_X))
 
         return X, onehot_Y
