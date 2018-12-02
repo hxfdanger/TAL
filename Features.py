@@ -36,13 +36,13 @@ class Features:
                 idx = int(line[1])
                 feat = line[2]
                 self.names.append(("Pile", idx, feat))
-                if feat == 'FORM':
+                if feat == 'FORM' or feat == 'LEMMA':
                     nb_form += 1
             elif line[0] == 'B':
                 idx = int(line[1])
                 feat = line[2]
                 self.names.append(("Buffer", idx, feat))
-                if feat == 'FORM':
+                if feat == 'FORM' or feat == 'LEMMA':
                     nb_form += 1
             else:
                 self.names.append(line[0])
@@ -57,7 +57,7 @@ class Features:
         # Labels encoders pour crée les vecteurs one hot du dataset
         self.labels_encoders = list()
         for features in self.names:
-            if features[2] != 'FORM':
+            if features[2] != 'FORM' and features[2] != 'LEMMA':
                 self.labels_encoders.append(LabelEncoder())
         # Label encoder pour crée les vecteurs one hot des labels
         self.label_encoder_Y = LabelEncoder()
@@ -82,7 +82,7 @@ class Features:
                 feat = feature[2]
                 idx_pile = pile.see(idx)
                 if idx_pile != None:
-                    if feat == 'FORM':  # Si il sagit d'un mot
+                    if feat == 'FORM' or feat == 'LEMMA':  # Si il sagit d'un mot
                         form.append(
                             tree.vertices[idx_pile].get_elementWord(element=feat))
                     else:
@@ -91,7 +91,7 @@ class Features:
 
                     # print(data)
                 else:
-                    if feat == 'FORM':  # Si il sagit d'un mot
+                    if feat == 'FORM' or feat == 'LEMMA':  # Si il sagit d'un mot
                         form.append('NA')  # Donnée non aquise
                     else:
                         data.append('NA')  # Donnée non aquise
@@ -106,12 +106,12 @@ class Features:
 
                 # Si la features concerne un élément hors de la phrase
                 if idx + idx_buff < 0 or idx + idx_buff >= len(tree.vertices):
-                    if feat == 'FORM':  # Si il sagit d'un mot
+                    if feat == 'FORM' or feat == 'LEMMA':  # Si il sagit d'un mot
                         form.append('NA')  # Donnée non aquise
                     else:
                         data.append('NA')  # Donnée non aquise
                 else:
-                    if feat == 'FORM':  # Si il sagit d'un mot
+                    if feat == 'FORM' or feat == 'LEMMA':  # Si il sagit d'un mot
                         form.append(
                             tree.vertices[idx + idx_buff].get_elementWord(element=feat))
                     else:
@@ -127,12 +127,13 @@ class Features:
                 else:
                     data.append('NA')  # Donnée non aquise
 
-        if len(form) > 0:
-            self.forms.append(form)
+        self.forms.append(form)
         self.datas.append(data)
-
-        # print(data)
-        return data
+        
+        if len(form) <= 0:
+			return data, None
+		else:
+			return data, form
 
     def convert_data_to_one_hot(self, data):
         """
