@@ -100,26 +100,40 @@ class Automate:
 			else:  # Si wi a déjà un parent on annule
 				self.pile.push(wi)
 
-	def run(self):
+	def run(self,path_embed=None):
 		"""
 		Execute l'automate sur la sentence et renvoie l'arbre obtenue
+		path_embed = Chemin vers le fichier d'embedding
 		"""
+		dict = charger_model(path_embed)
+		
 		while not self.fin():
 			#self.tree.print_tree()
 			
+			# Réccupération de la configuration
 			data, form = self.features.extract_features(self.pile, self.buff, self.tree)
+			data = self.features.convert_data_to_one_hot(data)
 			
 			if form != None:
-				configuration = np.concatenate((data,form),axis=None)
+				coefs = []
+				for word in form:
+					vec = get_coefs_word_fast(word, dict, dim_coefs=50)
+					coefs.append(vec)
+
+				coefs = np.array(coefs)
+				coefs = coefs.flatten()
+					
+				configuration = np.concatenate((data,coefs),axis=None)
 			else:
 				configuration = data
+			
 			predict = clf.predit(configuraion) # Oracle transition
-
 			label = inverse_onehot_label(predict)
 			
 			transition,label = label.split ("_")
 			print("Transition : ",transition,' ',label)
 			
+			# Application de la transition
 			if transition == 'SHIFT':
 				#print("shift")
 				self.shift()
