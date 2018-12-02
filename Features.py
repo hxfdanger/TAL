@@ -258,7 +258,7 @@ class Features:
         """
         dict = charger_model(path_embed)
         forms_data = []
-        for x in self.forms:
+        for x in self.forms:33
             coefs = []
             for word in x:
                 vec = get_coefs_word_fast(word, dict, dim_coefs=50)
