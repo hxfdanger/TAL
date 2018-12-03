@@ -253,8 +253,8 @@ class Features:
         Renvoie le label corespondant au label sous forme de one hot
         """
         # reverse to_categorical
-        label = np.argmax(label, axis=0)
-        label = np.array(label).reshape(1,)  # Shape pour le transform
+        label = np.argmax(label, axis=1)
+        # label = np.array(label).reshape(-1,)  # Shape pour le transform
 
         # reverse LabelEncoder
         label = self.label_encoder_Y.inverse_transform(label)
